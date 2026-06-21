@@ -10,6 +10,9 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4173',
     trace: 'on-first-retry',
+    // The app auto-detects UI language from the browser locale; pin it so the
+    // (Ukrainian) string assertions are deterministic.
+    locale: 'uk-UA',
   },
   projects: [
     {

@@ -18,6 +18,8 @@ import {
 } from 'lucide-react'
 import { LogoTile } from '@/components/brand/Logo'
 import { useReveal, useCountUp } from '@/hooks/useReveal'
+import { useT, localeOf } from '@/i18n'
+import { useAppStore } from '@/store/useAppStore'
 import { Reveal, StoreButtons, PhoneFrame, FloatChip, SectionHead, Parallax, GlowOrb } from './parts'
 import { cn } from '@/lib/cn'
 
@@ -25,6 +27,7 @@ const IMG = '/img'
 
 // ---------------------------------------------------------------- Nav
 function Nav() {
+  const t = useT()
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -53,19 +56,19 @@ function Nav() {
         <nav className="hidden items-center gap-9 lg:flex">
           {links.map((l) => (
             <a key={l.href} href={l.href} className="text-[15px] font-medium text-text-secondary transition-colors hover:text-text">
-              {l.label}
+              {t(l.label)}
             </a>
           ))}
         </nav>
         <div className="flex items-center gap-4">
           <Link to="/auth" className="hidden text-[15px] font-semibold text-text sm:block">
-            Увійти
+            {t('Увійти')}
           </Link>
           <Link
             to="/auth"
             className="rounded-full bg-primary px-5 py-2.5 text-[15px] font-semibold text-on-primary shadow-glow-sm transition-all hover:bg-primary-hover active:scale-95"
           >
-            Завантажити застосунок
+            {t('Завантажити застосунок')}
           </Link>
         </div>
       </div>
@@ -75,6 +78,7 @@ function Nav() {
 
 // ---------------------------------------------------------------- Hero
 function Hero() {
+  const t = useT()
   return (
     <section id="top" className="relative isolate overflow-hidden">
       <Parallax speed={0.16} scale className="absolute -inset-y-[12%] inset-x-0">
@@ -94,20 +98,19 @@ function Hero() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-70" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
               </span>
-              128 райдерів зараз у дорозі поруч
+              {t('128 райдерів зараз у дорозі поруч')}
             </span>
           </Reveal>
           <Reveal delay={1}>
             <h1 className="mt-6 font-display text-[clamp(44px,7vw,76px)] leading-[0.96] tracking-tight text-white">
-              ЗНАЙДИ СВОЮ КОМАНДУ.
+              {t('ЗНАЙДИ СВОЮ КОМАНДУ.')}
               <br />
-              КАТАЙ ПО <span className="text-shimmer">СВІТУ.</span>
+              <span className="text-shimmer">{t('КАТАЙ ПО СВІТУ.')}</span>
             </h1>
           </Reveal>
           <Reveal delay={2}>
             <p className="mt-6 max-w-lg text-[18px] leading-relaxed text-slate-300">
-              MotoMeet збирає кожного райдера, клуб і ралі на одній живій карті. Дивись, хто катає поруч, приєднуйся до
-              справжніх подій, плануй епічні маршрути — і більше ніколи не катай наодинці.
+              {t('MotoMeet збирає кожного райдера, клуб і ралі на одній живій карті. Дивись, хто катає поруч, приєднуйся до справжніх подій, плануй епічні маршрути — і більше ніколи не катай наодинці.')}
             </p>
           </Reveal>
           <Reveal delay={3}>
@@ -116,7 +119,7 @@ function Hero() {
           <Reveal delay={4}>
             <div className="mt-6 flex items-center gap-3">
               <span className="text-lg tracking-tight text-warning">★★★★★</span>
-              <span className="text-[15px] font-medium text-slate-300">4.9 · обожнюють 12 000+ райдерів</span>
+              <span className="text-[15px] font-medium text-slate-300">{t('4.9 · обожнюють 12 000+ райдерів')}</span>
             </div>
           </Reveal>
         </div>
@@ -130,15 +133,15 @@ function Hero() {
             className="absolute -left-10 top-24 hidden md:flex"
             icon={<Flag size={16} className="text-white" />}
             tint="#3B82F6"
-            title="42 учасники"
-            subtitle="Ралі «Альпійський грім»"
+            title={t('42 учасники')}
+            subtitle={t('Ралі «Альпійський грім»')}
           />
           <FloatChip
             className="absolute -right-8 bottom-28 hidden md:flex"
             icon={<Users size={16} className="text-white" />}
             tint="#22C55E"
             title="Залізні Вовки MC"
-            subtitle="1 240 учасників"
+            subtitle={t('1 240 учасників')}
           />
         </Parallax>
       </div>
@@ -154,12 +157,13 @@ const STATS = [
   { num: 2, suffix: 'M+', label: 'Км пройдено разом' },
 ]
 function Stats() {
+  const t = useT()
   const { ref, shown } = useReveal<HTMLDivElement>()
   return (
     <section className="border-y border-border bg-bg">
       <div ref={ref} className="mx-auto max-w-[1240px] px-5 py-14 md:px-12">
         <p className="text-center text-[13px] font-bold uppercase tracking-[0.2em] text-text-muted">
-          Нам довіряють райдери у 40+ країнах
+          {t('Нам довіряють райдери у 40+ країнах')}
         </p>
         <div className="mt-8 grid grid-cols-2 gap-y-8 md:flex md:items-center md:justify-between">
           {STATS.map((s, i) => (
@@ -174,15 +178,17 @@ function Stats() {
   )
 }
 function StatItem({ stat, active }: { stat: (typeof STATS)[number]; active: boolean }) {
+  const t = useT()
+  const lang = useAppStore((s) => s.lang)
   const v = useCountUp(stat.num, active)
-  const shown = stat.comma ? v.toLocaleString('uk-UA') : String(v)
+  const shown = stat.comma ? v.toLocaleString(localeOf(lang)) : String(v)
   return (
     <div className="flex flex-1 flex-col items-center text-center">
       <span className="font-display text-[clamp(36px,5vw,48px)] tracking-tight text-text">
         {shown}
         {stat.suffix}
       </span>
-      <span className="mt-1 text-[15px] font-medium text-text-secondary">{stat.label}</span>
+      <span className="mt-1 text-[15px] font-medium text-text-secondary">{t(stat.label)}</span>
     </div>
   )
 }
@@ -197,13 +203,14 @@ const FEATURES = [
   { icon: ShieldCheck, color: '#EF4444', title: 'Катай безпечно', desc: 'Жива геолокація, SOS-сигнали та чек-іни тримають команду разом.' },
 ]
 function Features() {
+  const t = useT()
   return (
     <section id="features" className="bg-bg">
       <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-12">
         <SectionHead
-          eyebrow="Усе для твого заїзду"
-          title="ОДИН ЗАСТОСУНОК ДЛЯ ВСЬОГО ЗАЇЗДУ"
-          subtitle="Від першого маркера на карті до останньої милі ралі — MotoMeet збирає всю мотоспільноту в одному місці."
+          eyebrow={t('Усе для твого заїзду')}
+          title={t('ОДИН ЗАСТОСУНОК ДЛЯ ВСЬОГО ЗАЇЗДУ')}
+          subtitle={t('Від першого маркера на карті до останньої милі ралі — MotoMeet збирає всю мотоспільноту в одному місці.')}
         />
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f, i) => (
@@ -215,8 +222,8 @@ function Features() {
                 >
                   <f.icon size={26} />
                 </span>
-                <h3 className="mt-5 text-xl font-bold text-text">{f.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-text-secondary">{f.desc}</p>
+                <h3 className="mt-5 text-xl font-bold text-text">{t(f.title)}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-text-secondary">{t(f.desc)}</p>
               </div>
             </Reveal>
           ))}
@@ -264,6 +271,7 @@ const SHOWCASE = [
   },
 ]
 function Showcase() {
+  const t = useT()
   return (
     <section className="relative isolate overflow-hidden bg-bg">
       <Parallax speed={0.1} className="absolute -inset-y-[10%] inset-x-0">
@@ -274,7 +282,7 @@ function Showcase() {
       <GlowOrb color="#8B5CF63a" size={620} className="left-[-12%] top-[40%]" speed={0.12} />
       <GlowOrb color="#22C55E2e" size={560} className="left-[60%] top-[72%]" />
       <div className="relative mx-auto max-w-[1240px] px-5 py-20 md:px-12">
-        <SectionHead eyebrow="Подивись у дії" title="СТВОРЕНО ДЛЯ ТВОГО СТИЛЮ ЇЗДИ" />
+        <SectionHead eyebrow={t('Подивись у дії')} title={t('СТВОРЕНО ДЛЯ ТВОГО СТИЛЮ ЇЗДИ')} />
         <div className="mt-10 flex flex-col gap-24">
           {SHOWCASE.map((s) => (
             <div
@@ -287,15 +295,15 @@ function Showcase() {
               {/* Text */}
               <Reveal className="flex-1">
                 <p className="text-[13px] font-bold uppercase tracking-[0.16em]" style={{ color: s.eyebrowColor }}>
-                  {s.eyebrow}
+                  {t(s.eyebrow)}
                 </p>
-                <h3 className="mt-3 font-display text-[clamp(28px,4vw,44px)] leading-tight tracking-tight text-text">{s.title}</h3>
-                <p className="mt-4 max-w-md text-[17px] leading-relaxed text-text-secondary">{s.desc}</p>
+                <h3 className="mt-3 font-display text-[clamp(28px,4vw,44px)] leading-tight tracking-tight text-text">{t(s.title)}</h3>
+                <p className="mt-4 max-w-md text-[17px] leading-relaxed text-text-secondary">{t(s.desc)}</p>
                 <ul className="mt-6 flex flex-col gap-3.5">
                   {s.bullets.map((b) => (
                     <li key={b} className="flex items-center gap-3 text-[16px] text-text">
                       <CircleCheck size={22} className="shrink-0 text-success" />
-                      {b}
+                      {t(b)}
                     </li>
                   ))}
                 </ul>
@@ -309,8 +317,8 @@ function Showcase() {
                   className={cn('absolute bottom-16 z-10', s.reverse ? '-right-4 md:-right-10' : '-left-4 md:-left-10')}
                   icon={s.chip.icon}
                   tint={s.chip.tint}
-                  title={s.chip.title}
-                  subtitle={s.chip.subtitle}
+                  title={t(s.chip.title)}
+                  subtitle={t(s.chip.subtitle)}
                 />
               </Reveal>
             </div>
@@ -328,10 +336,11 @@ const STEPS = [
   { n: '03', color: '#22C55E', icon: Bike, title: 'Катайте разом', desc: 'Приєднуйся до ралі, пиши команді та вирушай у дорогу. Більше ніколи не катай наодинці.' },
 ]
 function HowItWorks() {
+  const t = useT()
   return (
     <section id="routes" className="bg-[#0B1220]">
       <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-12">
-        <SectionHead eyebrow="Почни кататися за хвилини" title="ТРИ КРОКИ ДО НАСТУПНОГО ЗАЇЗДУ" />
+        <SectionHead eyebrow={t('Почни кататися за хвилини')} title={t('ТРИ КРОКИ ДО НАСТУПНОГО ЗАЇЗДУ')} />
         <div className="relative mt-14 grid gap-5 md:grid-cols-3">
           <div className="pointer-events-none absolute left-[16%] right-[16%] top-[72px] hidden h-px bg-gradient-to-r from-[#8B5CF600] via-primary/50 to-[#22C55E00] md:block" />
           {STEPS.map((s, i) => (
@@ -346,8 +355,8 @@ function HowItWorks() {
                     <s.icon size={24} />
                   </span>
                 </div>
-                <h3 className="mt-5 text-[21px] font-bold text-text">{s.title}</h3>
-                <p className="mt-3 text-[15px] leading-relaxed text-text-secondary">{s.desc}</p>
+                <h3 className="mt-5 text-[21px] font-bold text-text">{t(s.title)}</h3>
+                <p className="mt-3 text-[15px] leading-relaxed text-text-secondary">{t(s.desc)}</p>
               </div>
             </Reveal>
           ))}
@@ -364,21 +373,22 @@ const TESTIMONIALS = [
   { quote: 'Організовувати ралі клубу було хаосом. Тепер усі підтверджують участь і отримують маршрут в один тап.', name: 'Залізні Вовки MC', role: 'Адмін клубу · Альпи', avatar: `${IMG}/generated-1782059160111.png`, ring: '#22C55E' },
 ]
 function Testimonials() {
+  const t = useT()
   return (
     <section id="clubs" className="bg-bg">
       <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-12">
-        <SectionHead eyebrow="Обожнюють райдери" title="РАЙДЕРИ ГОВОРЯТЬ" />
+        <SectionHead eyebrow={t('Обожнюють райдери')} title={t('РАЙДЕРИ ГОВОРЯТЬ')} />
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {TESTIMONIALS.map((tt, i) => (
             <Reveal key={tt.name} delay={((i % 3) + 1) as 1 | 2 | 3}>
               <figure className="flex h-full flex-col gap-5 rounded-[22px] border border-border bg-surface p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-glow">
                 <span className="text-warning">★★★★★</span>
-                <blockquote className="flex-1 text-[16px] leading-relaxed text-text">{tt.quote}</blockquote>
+                <blockquote className="flex-1 text-[16px] leading-relaxed text-text">{t(tt.quote)}</blockquote>
                 <figcaption className="flex items-center gap-3">
                   <img src={tt.avatar} alt={tt.name} className="h-11 w-11 rounded-full object-cover" style={{ boxShadow: `0 0 0 2px ${tt.ring}` }} />
                   <span>
                     <span className="block text-[15px] font-bold text-text">{tt.name}</span>
-                    <span className="block text-[13px] text-text-muted">{tt.role}</span>
+                    <span className="block text-[13px] text-text-muted">{t(tt.role)}</span>
                   </span>
                 </figcaption>
               </figure>
@@ -392,28 +402,29 @@ function Testimonials() {
 
 // ---------------------------------------------------------------- Final CTA
 function FinalCta() {
+  const t = useT()
   return (
     <section id="pricing" className="relative isolate overflow-hidden" style={{ background: 'linear-gradient(120deg, #8B5CF6 0%, #6D28D9 50%, #3B1675 100%)' }}>
       <div className="pointer-events-none absolute -top-32 left-1/2 h-[700px] w-[900px] -translate-x-1/2" style={{ background: 'radial-gradient(ellipse at top, #FFFFFF24, transparent 60%)' }} />
       <div className="relative mx-auto flex max-w-[1240px] flex-col items-center px-5 py-28 text-center md:px-12">
         <Reveal>
-          <p className="text-[13px] font-bold uppercase tracking-[0.22em] text-white/70">Завантаження безкоштовне</p>
+          <p className="text-[13px] font-bold uppercase tracking-[0.22em] text-white/70">{t('Завантаження безкоштовне')}</p>
         </Reveal>
         <Reveal delay={1}>
           <h2 className="mt-4 font-display text-[clamp(40px,7vw,62px)] leading-[1.02] tracking-tight text-white">
-            ТВІЙ НАСТУПНИЙ ЗАЇЗД ПОЧИНАЄТЬСЯ ТУТ
+            {t('ТВІЙ НАСТУПНИЙ ЗАЇЗД ПОЧИНАЄТЬСЯ ТУТ')}
           </h2>
         </Reveal>
         <Reveal delay={2}>
           <p className="mt-5 max-w-xl text-[19px] leading-relaxed text-white/90">
-            Приєднуйся до 50 000+ райдерів, які вже на карті. Завантаж MotoMeet, знайди свою команду й перетвори кожен заїзд на зустріч.
+            {t('Приєднуйся до 50 000+ райдерів, які вже на карті. Завантаж MotoMeet, знайди свою команду й перетвори кожен заїзд на зустріч.')}
           </p>
         </Reveal>
         <Reveal delay={3}>
           <StoreButtons className="mt-9 justify-center" />
         </Reveal>
         <Reveal delay={4}>
-          <p className="mt-6 text-sm font-medium text-white/85">★★★★★ 4.9 в App Store · Безкоштовно · Без реклами, назавжди</p>
+          <p className="mt-6 text-sm font-medium text-white/85">{t('★★★★★ 4.9 в App Store · Безкоштовно · Без реклами, назавжди')}</p>
         </Reveal>
       </div>
     </section>
@@ -421,12 +432,13 @@ function FinalCta() {
 }
 
 // ---------------------------------------------------------------- Footer
-const FOOT = {
+const FOOT: Record<string, string[]> = {
   Продукт: ['Жива карта', 'Події та ралі', 'Клуби та команди', 'Планувальник маршрутів', 'Ціни'],
   Спільнота: ['Для райдерів', 'Для клубів', 'Безпека в дорозі', 'Історії райдерів'],
   Компанія: ['Про нас', 'Кар’єра', 'Прес-кіт', 'Контакти'],
 }
 function Footer() {
+  const t = useT()
   return (
     <footer className="border-t border-border bg-[#0B1220]">
       <div className="mx-auto max-w-[1240px] px-5 py-16 md:px-12">
@@ -437,7 +449,7 @@ function Footer() {
               <span className="font-display text-[23px] tracking-wide text-white">MOTOMEET</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-text-secondary">
-              Жива карта для світової мотоспільноти. Знаходь райдерів, приєднуйся до ралі, ніколи не катай наодинці.
+              {t('Жива карта для світової мотоспільноти. Знаходь райдерів, приєднуйся до ралі, ніколи не катай наодинці.')}
             </p>
             <div className="mt-5 flex gap-2.5">
               {[Instagram, Youtube, Twitter, Music2].map((Icon, i) => (
@@ -450,12 +462,12 @@ function Footer() {
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:gap-16">
             {Object.entries(FOOT).map(([head, items]) => (
               <div key={head}>
-                <h4 className="text-[13px] font-bold uppercase tracking-wider text-text-muted">{head}</h4>
+                <h4 className="text-[13px] font-bold uppercase tracking-wider text-text-muted">{t(head)}</h4>
                 <ul className="mt-4 flex flex-col gap-3">
                   {items.map((it) => (
                     <li key={it}>
                       <a href="#top" className="text-[15px] font-medium text-text-secondary transition-colors hover:text-text">
-                        {it}
+                        {t(it)}
                       </a>
                     </li>
                   ))}
@@ -466,11 +478,11 @@ function Footer() {
         </div>
         <div className="my-10 h-px bg-border" />
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-[13px] text-text-muted">© 2026 MotoMeet. Зроблено райдерами для райдерів.</p>
+          <p className="text-[13px] text-text-muted">{t('© 2026 MotoMeet. Зроблено райдерами для райдерів.')}</p>
           <div className="flex gap-7">
             {['Приватність', 'Умови', 'Cookies'].map((l) => (
               <a key={l} href="#top" className="text-[13px] text-text-muted transition-colors hover:text-text">
-                {l}
+                {t(l)}
               </a>
             ))}
           </div>

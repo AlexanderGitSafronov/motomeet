@@ -212,7 +212,7 @@ export function SettingsScreen() {
       <Sheet open={langOpen} onClose={() => setLangOpen(false)}>
         <div className="px-5 pb-7 pt-2">
           <h2 className="mb-3 text-xl font-extrabold text-text">{t('Мова')}</h2>
-          <div className="flex flex-col gap-2">
+          <div className="flex max-h-[60vh] flex-col gap-2 overflow-y-auto no-scrollbar">
             {LANGUAGES.map((l) => (
               <button
                 key={l.value}

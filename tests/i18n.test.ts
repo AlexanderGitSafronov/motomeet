@@ -14,13 +14,15 @@ describe('i18n', () => {
     expect(translate('Стежити', 'en')).toBe('Follow')
   })
 
-  it('translates to Russian', () => {
-    expect(translate('Карта', 'ru')).toBe('Карта')
-    expect(translate('Події', 'ru')).toBe('События')
-    expect(translate('Налаштування', 'ru')).toBe('Настройки')
+  it('translates to other supported languages', () => {
+    expect(translate('Карта', 'de')).toBe('Karte')
+    expect(translate('Карта', 'es')).toBe('Mapa')
+    expect(translate('Карта', 'fr')).toBe('Carte')
+    expect(translate('Карта', 'zh')).toBe('地图')
   })
 
   it('falls back to the source for unknown keys', () => {
     expect(translate('Невідомий рядок', 'en')).toBe('Невідомий рядок')
+    expect(translate('Карта', 'uk')).toBe('Карта')
   })
 })

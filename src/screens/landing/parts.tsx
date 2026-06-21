@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Apple, Play } from 'lucide-react'
 import { useReveal, useParallax } from '@/hooks/useReveal'
+import { useT } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 /** Translate children on scroll for a layered parallax effect. */
@@ -73,6 +74,7 @@ export function Reveal({
 
 /** App-store / Google-Play download buttons (white pills). */
 export function StoreButtons({ className }: { className?: string }) {
+  const t = useT()
   return (
     <div className={cn('flex flex-wrap items-center gap-3.5', className)}>
       <a
@@ -81,7 +83,7 @@ export function StoreButtons({ className }: { className?: string }) {
       >
         <Apple size={26} fill="currentColor" />
         <span className="flex flex-col leading-none">
-          <span className="text-[11px] font-medium opacity-70">Завантажити в</span>
+          <span className="text-[11px] font-medium opacity-70">{t('Завантажити в')}</span>
           <span className="text-[17px] font-bold">App Store</span>
         </span>
       </a>
@@ -91,7 +93,7 @@ export function StoreButtons({ className }: { className?: string }) {
       >
         <Play size={24} fill="currentColor" />
         <span className="flex flex-col leading-none">
-          <span className="text-[11px] font-medium opacity-70">Завантажити з</span>
+          <span className="text-[11px] font-medium opacity-70">{t('Завантажити з')}</span>
           <span className="text-[17px] font-bold">Google Play</span>
         </span>
       </a>

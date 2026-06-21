@@ -20,7 +20,24 @@ import {
 import { api, setAuthToken, ApiError } from '@/api/client'
 
 export type Theme = 'dark' | 'light'
-export type Lang = 'uk' | 'en' | 'ru'
+export type Lang = 'uk' | 'en' | 'es' | 'pt' | 'de' | 'fr' | 'it' | 'pl' | 'zh' | 'ja'
+
+const SUPPORTED_LANGS: Lang[] = ['uk', 'en', 'es', 'pt', 'de', 'fr', 'it', 'pl', 'zh', 'ja']
+
+/**
+ * Pick the initial language from the device/browser locale on first visit.
+ * A persisted choice (rehydrated by `persist`) always overrides this. Falls
+ * back to Ukrainian (the app's primary language) when nothing matches.
+ */
+function detectLang(): Lang {
+  if (typeof navigator === 'undefined') return 'uk'
+  const candidates = [navigator.language, ...(navigator.languages ?? [])]
+  for (const c of candidates) {
+    const code = c?.toLowerCase().split('-')[0] as Lang
+    if (code && SUPPORTED_LANGS.includes(code)) return code
+  }
+  return 'uk'
+}
 
 export interface ToastMsg {
   id: number
@@ -141,7 +158,7 @@ export const useAppStore = create<AppState>()(
       theme: 'dark',
       setTheme: (theme) => set({ theme }),
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
-      lang: 'uk',
+      lang: detectLang(),
       setLang: (lang) => set({ lang }),
 
       // ---- auth ----

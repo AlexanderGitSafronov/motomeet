@@ -2,6 +2,11 @@ import '@testing-library/jest-dom/vitest'
 import { afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 
+// The store auto-detects language from navigator on first load; pin it to
+// Ukrainian so unit tests render the source strings deterministically.
+Object.defineProperty(navigator, 'language', { value: 'uk-UA', configurable: true })
+Object.defineProperty(navigator, 'languages', { value: ['uk-UA'], configurable: true })
+
 afterEach(() => {
   cleanup()
   localStorage.clear()
