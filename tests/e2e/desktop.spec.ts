@@ -18,10 +18,22 @@ test('desktop shows sidebar nav and riding-now rail', async ({ page }) => {
 
   // Right rail
   await expect(page.getByRole('heading', { name: 'Зараз у дорозі' })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Найближчі події' })).toBeVisible()
+  await expect(page.getByRole('tab', { name: 'Райдери' })).toBeVisible()
 
   // Bottom nav is hidden on desktop
   await expect(page.getByRole('navigation', { name: 'Головна навігація' })).toBeHidden()
+})
+
+test('riding-now rail tabs switch content', async ({ page }) => {
+  await page.goto('/auth')
+  await page.getByRole('button', { name: 'Увійти', exact: true }).click()
+  await expect(page).toHaveURL(/\/map$/)
+  // Events tab → an event card appears in the rail
+  await page.getByRole('tab', { name: 'Події' }).click()
+  await expect(page.getByText('Трек-день Гоккенгайм GP').first()).toBeVisible()
+  // Clubs tab → a club card appears
+  await page.getByRole('tab', { name: 'Клуби' }).click()
+  await expect(page.getByText('Залізні Вовки MC').first()).toBeVisible()
 })
 
 test('desktop events grid renders two columns of cards', async ({ page }) => {

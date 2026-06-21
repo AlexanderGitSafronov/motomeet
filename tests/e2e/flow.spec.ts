@@ -85,8 +85,11 @@ test('create event flow publishes', async ({ page }) => {
   await page.getByRole('button', { name: 'Створити подію' }).click()
   await expect(page.getByRole('heading', { name: 'Створення події' })).toBeVisible()
   await page.getByLabel('Назва події').fill('Світанковий патруль')
+  await page.getByLabel('Локація').fill('Київ, Україна')
   await page.getByRole('button', { name: /Опублікувати подію/ }).click()
   await expect(page).toHaveURL(/\/events$/)
+  // the new event is created and listed (scoped to the card heading, not the toast)
+  await expect(page.getByRole('heading', { name: 'Світанковий патруль' })).toBeVisible()
 })
 
 test('search filters across riders and clubs', async ({ page }) => {

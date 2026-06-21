@@ -7,6 +7,7 @@ import type {
   Club,
   AppNotification,
   SavedRoute,
+  EventCategory,
 } from '@/data/types'
 import {
   riders as seedRiders,
@@ -60,6 +61,17 @@ interface AppState {
   galleryItems: GalleryItem[]
   customRoutes: SavedRoute[]
   loadAll: () => Promise<void>
+  createEvent: (input: {
+    title: string
+    category: EventCategory
+    categoryLabel: string
+    cover: string
+    date: string
+    location: string
+    city: string
+    description: string
+    pos?: [number, number]
+  }) => string
 
   // ---- social graph (optimistic maps, synced to API) ----
   following: Record<string, boolean>
@@ -228,6 +240,31 @@ export const useAppStore = create<AppState>()(
         } catch {
           /* offline → keep seed data */
         }
+      },
+
+      createEvent: (input) => {
+        const id = `e-${seq++}-${Date.now().toString(36)}`
+        const ev: RideEvent = {
+          id,
+          title: input.title,
+          category: input.category,
+          categoryLabel: input.categoryLabel,
+          cover: input.cover,
+          date: input.date,
+          location: input.location,
+          city: input.city,
+          going: 0,
+          goingAvatars: [],
+          priceLabel: 'Безкоштовно',
+          description: input.description,
+          pos: input.pos,
+        }
+        set((s) => ({
+          events: [ev, ...s.events],
+          joinedEvents: { ...s.joinedEvents, [id]: true },
+        }))
+        api.post('/events', { id, ...input }).catch(() => {})
+        return id
       },
 
       // ---- social graph ----
