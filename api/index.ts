@@ -174,13 +174,18 @@ async function route(method: string, path: string, body: any, authHeader?: strin
 
   if (seg[0] === 'events') {
     if (seg.length === 1 && method === 'POST') {
-      const { id, title, category, categoryLabel, cover, date, location, city, description, pos } = body ?? {}
+      const { id, title, category, categoryLabel, cover, date, location, city, description, pos, routePath, distanceKm, duration } = body ?? {}
       if (!title?.trim()) return bad('Вкажіть назву події')
       const eid = id || `e-${Date.now().toString(36)}`
       await q(
-        `insert into events (id,title,category,category_label,cover,date,location,city,going,going_avatars,price_label,description,lat,lng)
-         values ($1,$2,$3,$4,$5,$6,$7,$8,0,'[]'::jsonb,'Безкоштовно',$9,$10,$11) on conflict (id) do nothing`,
-        [eid, title.trim(), category || 'meetup', categoryLabel || 'Зустріч', cover || '', date || new Date().toISOString(), location || '', city || '', description || '', pos?.[0] ?? null, pos?.[1] ?? null]
+        `insert into events (id,title,category,category_label,cover,date,location,city,going,going_avatars,price_label,description,lat,lng,route_path,distance_km,duration)
+         values ($1,$2,$3,$4,$5,$6,$7,$8,0,'[]'::jsonb,'Безкоштовно',$9,$10,$11,$12,$13,$14) on conflict (id) do nothing`,
+        [
+          eid, title.trim(), category || 'meetup', categoryLabel || 'Зустріч', cover || '',
+          date || new Date().toISOString(), location || '', city || '', description || '',
+          pos?.[0] ?? null, pos?.[1] ?? null,
+          routePath ? JSON.stringify(routePath) : null, distanceKm ?? null, duration ?? null,
+        ]
       )
       await q(`insert into event_participants (event_id,user_id) values ($1,$2) on conflict do nothing`, [eid, uid])
       return created({ id: eid })

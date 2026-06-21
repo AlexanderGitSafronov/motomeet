@@ -85,11 +85,40 @@ test('create event flow publishes', async ({ page }) => {
   await page.getByRole('button', { name: 'Створити подію' }).click()
   await expect(page.getByRole('heading', { name: 'Створення події' })).toBeVisible()
   await page.getByLabel('Назва події').fill('Світанковий патруль')
+  // a meetup is a single-spot event → one location field
+  await page.getByRole('button', { name: 'Зустріч' }).click()
   await page.getByLabel('Локація').fill('Київ, Україна')
   await page.getByRole('button', { name: /Опублікувати подію/ }).click()
   await expect(page).toHaveURL(/\/events$/)
   // the new event is created and listed (scoped to the card heading, not the toast)
   await expect(page.getByRole('heading', { name: 'Світанковий патруль' })).toBeVisible()
+})
+
+test('create tour plots a from→to route and lists it', async ({ page }) => {
+  // Hermetic geocoding + routing so the test never hits the network.
+  await page.route('**/nominatim.openstreetmap.org/**', (r) =>
+    r.fulfill({
+      json: [{ display_name: 'Київ, Україна', lat: '50.4501', lon: '30.5234', name: 'Київ', address: { city: 'Київ', country: 'Україна' } }],
+    })
+  )
+  await page.route('**/router.project-osrm.org/**', (r) =>
+    r.fulfill({
+      json: { routes: [{ distance: 540000, duration: 21600, geometry: { coordinates: [[30.5234, 50.4501], [24.0297, 49.8397]] } }] },
+    })
+  )
+  await login(page)
+  await page.getByRole('button', { name: 'Створити подію' }).click()
+  await page.getByLabel('Назва події').fill('Літній тур на захід')
+  // category defaults to Тур → from/to fields appear
+  await page.getByLabel('Звідки').fill('Київ')
+  await page.getByRole('button', { name: /Київ/ }).first().click()
+  await page.getByLabel('Куди').fill('Львів')
+  await page.getByRole('button', { name: /Київ/ }).first().click()
+  // the plotted route summary appears once both ends are set
+  await expect(page.getByText(/Маршрут ≈/)).toBeVisible()
+  await page.getByRole('button', { name: /Опублікувати подію/ }).click()
+  await expect(page).toHaveURL(/\/events$/)
+  await expect(page.getByRole('heading', { name: 'Літній тур на захід' })).toBeVisible()
 })
 
 test('search filters across riders and clubs', async ({ page }) => {

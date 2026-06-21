@@ -149,7 +149,7 @@ export function EventPageScreen() {
                 Прокласти <Navigation size={14} />
               </button>
             </div>
-            <div className="mt-3 h-44 w-full overflow-hidden rounded-lg border border-border">
+            <div className="relative z-0 mt-3 h-44 w-full overflow-hidden rounded-lg border border-border isolate">
               <LiveMap
                 interactive={false}
                 showRiders={false}
@@ -158,6 +158,7 @@ export function EventPageScreen() {
                 center={event.pos}
                 zoom={13}
                 routePath={event.routePath as LatLngExpression[] | undefined}
+                fitTo={event.routePath as LatLngExpression[] | undefined}
               />
             </div>
           </div>
@@ -167,9 +168,9 @@ export function EventPageScreen() {
       {/* Sticky join bar */}
       <div className="absolute inset-x-0 bottom-0 z-20 glass px-5 pb-safe pt-3">
         <div className="mx-auto flex max-w-app items-center gap-4 pb-3">
-          <div>
+          <div className="min-w-0">
             <p className="text-lg font-extrabold text-text">{event.priceLabel}</p>
-            <p className="text-xs text-text-muted">вхід · кемп €40</p>
+            {event.city && <p className="max-w-[120px] truncate text-xs text-text-muted">{event.city}</p>}
           </div>
           <Button
             className="flex-1"

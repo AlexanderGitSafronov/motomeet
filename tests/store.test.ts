@@ -52,15 +52,50 @@ describe('social graph', () => {
     expect(useAppStore.getState().toggleFollow('r-diego')).toBe(false)
   })
 
-  it('toggles event join', () => {
+  it('toggles event join and moves the participant count', () => {
+    const going = () => useAppStore.getState().events.find((e) => e.id === 'e-alpine')!.going
+    const before = going()
     expect(useAppStore.getState().toggleEventJoin('e-alpine')).toBe(true)
     expect(useAppStore.getState().joinedEvents['e-alpine']).toBe(true)
+    expect(going()).toBe(before + 1)
     expect(useAppStore.getState().toggleEventJoin('e-alpine')).toBe(false)
+    expect(going()).toBe(before)
   })
 
-  it('toggles club join', () => {
+  it('toggles club join and moves the member count', () => {
+    const members = () => useAppStore.getState().clubs.find((c) => c.id === 'c-alpine')!.members
+    const before = members()
     expect(useAppStore.getState().toggleClubJoin('c-alpine')).toBe(true)
+    expect(members()).toBe(before + 1)
     expect(useAppStore.getState().toggleClubJoin('c-alpine')).toBe(false)
+    expect(members()).toBe(before)
+  })
+})
+
+describe('createEvent', () => {
+  it('prepends a journey with its route and counts the creator as going', () => {
+    const id = useAppStore.getState().createEvent({
+      title: 'Тестовий тур',
+      category: 'tour',
+      categoryLabel: 'Груповий тур',
+      cover: '',
+      date: '2026-08-01T07:00:00',
+      location: 'Київ → Львів',
+      city: 'Київ',
+      description: '',
+      pos: [50.45, 30.52],
+      routePath: [
+        [50.45, 30.52],
+        [49.84, 24.03],
+      ],
+      distanceKm: 540,
+      duration: '6 год',
+    })
+    const ev = useAppStore.getState().events.find((e) => e.id === id)!
+    expect(ev.going).toBe(1)
+    expect(ev.routePath).toHaveLength(2)
+    expect(ev.distanceKm).toBe(540)
+    expect(useAppStore.getState().joinedEvents[id]).toBe(true)
   })
 })
 

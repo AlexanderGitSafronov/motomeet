@@ -15,6 +15,63 @@ type NominatimResult = {
   address?: Record<string, string>
 }
 
+export interface RouteResult {
+  /** Polyline points as [lat, lng]. */
+  path: [number, number][]
+  distanceKm: number
+  durationMin: number
+}
+
+interface LatLng {
+  lat: number
+  lng: number
+}
+
+/** Great-circle distance in km between two points. */
+function haversineKm(a: LatLng, b: LatLng): number {
+  const R = 6371
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180
+  const lat1 = (a.lat * Math.PI) / 180
+  const lat2 = (b.lat * Math.PI) / 180
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(h))
+}
+
+/**
+ * Plot a driving route between two points via OSRM (free, no key).
+ * Falls back to a straight line + haversine distance if routing is unavailable.
+ */
+export async function routeBetween(from: LatLng, to: LatLng, signal?: AbortSignal): Promise<RouteResult> {
+  const url =
+    `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}` +
+    `?overview=full&geometries=geojson`
+  try {
+    const res = await fetch(url, { signal })
+    if (res.ok) {
+      const data = (await res.json()) as {
+        routes?: { distance: number; duration: number; geometry: { coordinates: [number, number][] } }[]
+      }
+      const route = data.routes?.[0]
+      if (route?.geometry?.coordinates?.length) {
+        const path = route.geometry.coordinates.map((c) => [c[1], c[0]] as [number, number])
+        return { path, distanceKm: route.distance / 1000, durationMin: route.duration / 60 }
+      }
+    }
+  } catch {
+    /* fall through to straight-line estimate */
+  }
+  const distanceKm = haversineKm(from, to)
+  return {
+    path: [
+      [from.lat, from.lng],
+      [to.lat, to.lng],
+    ],
+    distanceKm,
+    durationMin: (distanceKm / 65) * 60, // ~65 km/h touring average
+  }
+}
+
 /** Search places by free-text query. Returns up to 5 matches. */
 export async function searchPlaces(query: string, signal?: AbortSignal): Promise<Place[]> {
   const q = query.trim()

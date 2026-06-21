@@ -71,6 +71,9 @@ interface AppState {
     city: string
     description: string
     pos?: [number, number]
+    routePath?: [number, number][]
+    distanceKm?: number
+    duration?: string
   }) => string
 
   // ---- social graph (optimistic maps, synced to API) ----
@@ -253,11 +256,14 @@ export const useAppStore = create<AppState>()(
           date: input.date,
           location: input.location,
           city: input.city,
-          going: 0,
+          going: 1, // the creator is the first participant (matches the API)
           goingAvatars: [],
           priceLabel: 'Безкоштовно',
           description: input.description,
           pos: input.pos,
+          routePath: input.routePath,
+          distanceKm: input.distanceKm,
+          duration: input.duration,
         }
         set((s) => ({
           events: [ev, ...s.events],
@@ -279,7 +285,12 @@ export const useAppStore = create<AppState>()(
       joinedEvents: {},
       toggleEventJoin: (eventId) => {
         const next = !get().joinedEvents[eventId]
-        set((s) => ({ joinedEvents: { ...s.joinedEvents, [eventId]: next } }))
+        set((s) => ({
+          joinedEvents: { ...s.joinedEvents, [eventId]: next },
+          events: s.events.map((e) =>
+            e.id === eventId ? { ...e, going: Math.max(0, e.going + (next ? 1 : -1)) } : e
+          ),
+        }))
         ;(next ? api.post(`/events/${eventId}/join`) : api.del(`/events/${eventId}/join`)).catch(() => {})
         return next
       },
@@ -287,7 +298,12 @@ export const useAppStore = create<AppState>()(
       joinedClubs: { 'c-nightowls': true },
       toggleClubJoin: (clubId) => {
         const next = !get().joinedClubs[clubId]
-        set((s) => ({ joinedClubs: { ...s.joinedClubs, [clubId]: next } }))
+        set((s) => ({
+          joinedClubs: { ...s.joinedClubs, [clubId]: next },
+          clubs: s.clubs.map((c) =>
+            c.id === clubId ? { ...c, members: Math.max(0, c.members + (next ? 1 : -1)) } : c
+          ),
+        }))
         ;(next ? api.post(`/clubs/${clubId}/join`) : api.del(`/clubs/${clubId}/join`)).catch(() => {})
         return next
       },

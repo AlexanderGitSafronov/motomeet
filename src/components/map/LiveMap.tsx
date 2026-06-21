@@ -30,6 +30,17 @@ function ResizeHandler() {
   return null
 }
 
+/** Frames the map so the given points (e.g. a route) are all visible. */
+function FitBounds({ points }: { points: LatLngExpression[] }) {
+  const map = useMap()
+  const key = JSON.stringify(points)
+  useEffect(() => {
+    const pts = JSON.parse(key) as [number, number][]
+    if (pts.length > 1) map.fitBounds(pts, { padding: [28, 28] })
+  }, [map, key])
+  return null
+}
+
 interface LiveMapProps {
   onRiderClick?: (rider: Rider) => void
   onEventClick?: (eventId: string) => void
@@ -38,6 +49,8 @@ interface LiveMapProps {
   showClubs?: boolean
   showRiders?: boolean
   routePath?: LatLngExpression[]
+  /** When set (≥2 points), the map auto-frames these instead of using center/zoom. */
+  fitTo?: LatLngExpression[]
   center?: [number, number]
   zoom?: number
   interactive?: boolean
@@ -52,6 +65,7 @@ export function LiveMap({
   showClubs = true,
   showRiders = true,
   routePath,
+  fitTo,
   center = MAP_CENTER,
   zoom = 14,
   interactive = true,
@@ -73,11 +87,12 @@ export function LiveMap({
       scrollWheelZoom={interactive}
       doubleClickZoom={interactive}
       touchZoom={interactive}
-      className={className ?? 'h-full w-full'}
+      className={`${className ?? 'h-full w-full'} isolate`}
       style={{ background: 'var(--mm-map-bg)' }}
     >
       <TileLayer url={theme === 'light' ? TILES.light : TILES.dark} attribution={ATTRIBUTION} />
       <ResizeHandler />
+      {fitTo && fitTo.length > 1 && <FitBounds points={fitTo} />}
 
       {/* Me */}
       <Marker position={center} icon={meMarker()} interactive={false} />
