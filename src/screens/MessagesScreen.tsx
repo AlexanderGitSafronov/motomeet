@@ -9,10 +9,12 @@ import { Avatar } from '@/components/ui/Avatar'
 import { ConversationRow } from '@/components/cards/ConversationRow'
 import { conversations } from '@/data/mock'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 
 export function MessagesScreen() {
   const navigate = useNavigate()
   const riders = useAppStore((s) => s.riders)
+  const t = useT()
   const [query, setQuery] = useState('')
   const online = riders.filter((r) => r.online).slice(0, 6)
 
@@ -28,7 +30,7 @@ export function MessagesScreen() {
 
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-2">
-        <h1 className="text-[28px] font-extrabold text-text">Повідомлення</h1>
+        <h1 className="text-[28px] font-extrabold text-text">{t('Повідомлення')}</h1>
         <IconButton label="Нове повідомлення" variant="primary" onClick={() => navigate('/community')}>
           <PenSquare size={20} />
         </IconButton>
@@ -36,7 +38,7 @@ export function MessagesScreen() {
 
       {/* Search */}
       <div className="px-5 pt-4">
-        <SearchBar value={query} onChange={setQuery} onClear={() => setQuery('')} placeholder="Пошук повідомлень" />
+        <SearchBar value={query} onChange={setQuery} onClear={() => setQuery('')} placeholder={t('Пошук повідомлень')} />
       </div>
 
       {/* Online row */}

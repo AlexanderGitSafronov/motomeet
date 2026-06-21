@@ -3,6 +3,7 @@ import { Map, CalendarDays, Route, Shield, MessageCircle, Plus, ChevronRight } f
 import { Wordmark } from '@/components/brand/Wordmark'
 import { Avatar } from '@/components/ui/Avatar'
 import { useCurrentUser } from '@/store/useCurrentUser'
+import { useT } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 const items = [
@@ -17,6 +18,7 @@ const items = [
 export function Sidebar() {
   const navigate = useNavigate()
   const currentUser = useCurrentUser()
+  const t = useT()
   return (
     <aside className="hidden w-[240px] shrink-0 flex-col border-r border-border bg-surface/40 px-4 py-5 lg:flex">
       <button onClick={() => navigate('/map')} className="mb-7 flex items-center px-2">
@@ -38,7 +40,7 @@ export function Sidebar() {
             }
           >
             <Icon size={20} />
-            {label}
+            {t(label)}
           </NavLink>
         ))}
 
@@ -46,7 +48,7 @@ export function Sidebar() {
           onClick={() => navigate('/create-event')}
           className="mt-3 flex items-center gap-2 rounded-md bg-primary px-4 py-3 text-[15px] font-semibold text-on-primary shadow-glow-sm transition-colors hover:bg-primary-hover"
         >
-          <Plus size={18} /> Створити подію
+          <Plus size={18} /> {t('Створити подію')}
         </button>
       </nav>
 

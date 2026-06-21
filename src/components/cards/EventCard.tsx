@@ -4,6 +4,7 @@ import type { RideEvent } from '@/data/types'
 import { AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 import { dateBadge, dateTimeLabel } from '@/lib/format'
 import { cn } from '@/lib/cn'
 
@@ -12,6 +13,7 @@ export function EventCard({ event, className }: { event: RideEvent; className?: 
   const joined = useAppStore((s) => !!s.joinedEvents[event.id])
   const toggleJoin = useAppStore((s) => s.toggleEventJoin)
   const pushToast = useAppStore((s) => s.pushToast)
+  const t = useT()
   const { day, month } = dateBadge(event.date)
 
   const onJoin = (e: React.MouseEvent) => {
@@ -68,7 +70,7 @@ export function EventCard({ event, className }: { event: RideEvent; className?: 
             <span className="text-sm font-medium text-text-secondary">+{event.going} учасників</span>
           </span>
           <Button size="sm" variant={joined ? 'secondary' : 'primary'} onClick={onJoin}>
-            {joined ? 'Іду' : 'Піду'}
+            {joined ? t('Іду') : t('Піду')}
           </Button>
         </div>
       </div>

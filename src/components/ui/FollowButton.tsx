@@ -1,5 +1,6 @@
 import { Button } from './Button'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 
 interface FollowButtonProps {
   riderId: string
@@ -12,6 +13,7 @@ export function FollowButton({ riderId, riderName, size = 'sm', block }: FollowB
   const following = useAppStore((s) => !!s.following[riderId])
   const toggleFollow = useAppStore((s) => s.toggleFollow)
   const pushToast = useAppStore((s) => s.pushToast)
+  const t = useT()
 
   const onClick = () => {
     const next = toggleFollow(riderId)
@@ -29,7 +31,7 @@ export function FollowButton({ riderId, riderName, size = 'sm', block }: FollowB
       onClick={onClick}
       aria-pressed={following}
     >
-      {following ? 'Ви стежите' : 'Стежити'}
+      {following ? t('Ви стежите') : t('Стежити')}
     </Button>
   )
 }

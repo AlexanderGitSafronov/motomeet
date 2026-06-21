@@ -80,6 +80,17 @@ test('search filters across riders and clubs', async ({ page }) => {
   await expect(page.getByText('Залізні Вовки MC')).toBeVisible()
 })
 
+test('switch interface language to English', async ({ page }) => {
+  await login(page)
+  await page.getByRole('link', { name: 'Профіль' }).click()
+  await page.getByRole('button', { name: 'Налаштування' }).click()
+  await expect(page.getByRole('heading', { name: 'Налаштування' })).toBeVisible()
+  await page.getByText('Мова', { exact: true }).click()
+  await page.getByRole('button', { name: 'English' }).click()
+  // UI re-renders in English
+  await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible()
+})
+
 test('notifications can be marked all read', async ({ page }) => {
   await login(page)
   // Reached via Профіль → Налаштування → Push-сповіщення

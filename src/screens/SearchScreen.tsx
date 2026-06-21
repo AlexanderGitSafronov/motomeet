@@ -9,6 +9,7 @@ import { RiderRow } from '@/components/cards/RiderRow'
 import { EventCard } from '@/components/cards/EventCard'
 import { ClubCard } from '@/components/cards/ClubCard'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 type Tab = 'riders' | 'events' | 'clubs'
@@ -24,6 +25,7 @@ export function SearchScreen() {
   const riders = useAppStore((s) => s.riders)
   const events = useAppStore((s) => s.events)
   const clubs = useAppStore((s) => s.clubs)
+  const t = useT()
   const [query, setQuery] = useState('Ducati')
   const [tab, setTab] = useState<Tab>('riders')
   const [active, setActive] = useState<string[]>(['near'])
@@ -70,13 +72,13 @@ export function SearchScreen() {
           value={query}
           onChange={setQuery}
           onClear={() => setQuery('')}
-          placeholder="Пошук райдерів, подій, клубів"
+          placeholder={t('Пошук райдерів, подій, клубів')}
           autoFocus
           active
           className="flex-1"
         />
         <button onClick={() => navigate('/map')} className="shrink-0 font-semibold text-primary">
-          Скасувати
+          {t('Скасувати')}
         </button>
       </div>
 
@@ -93,7 +95,7 @@ export function SearchScreen() {
                 on ? 'bg-primary text-on-primary' : 'bg-surface-2 text-text-secondary border border-border'
               )}
             >
-              <Icon size={15} /> {label}
+              <Icon size={15} /> {t(label)}
             </button>
           )
         })}
@@ -103,9 +105,9 @@ export function SearchScreen() {
       <div className="px-5 pt-4">
         <Segmented<Tab>
           options={[
-            { value: 'riders', label: 'Райдери' },
-            { value: 'events', label: 'Події' },
-            { value: 'clubs', label: 'Клуби' },
+            { value: 'riders', label: t('Райдери') },
+            { value: 'events', label: t('Події') },
+            { value: 'clubs', label: t('Клуби') },
           ]}
           value={tab}
           onChange={setTab}
@@ -116,9 +118,9 @@ export function SearchScreen() {
       <div className="flex items-center justify-between px-5 pt-5">
         <h2 className="text-base font-bold text-text">
           {count}{' '}
-          {tab === 'riders' ? 'райдерів поруч' : tab === 'events' ? 'подій знайдено' : 'клубів знайдено'}
+          {tab === 'riders' ? t('райдерів поруч') : tab === 'events' ? t('подій знайдено') : t('клубів знайдено')}
         </h2>
-        <span className="text-sm text-text-muted">Сортування: відстань</span>
+        <span className="text-sm text-text-muted">{t('Сортування: відстань')}</span>
       </div>
 
       {/* Results */}

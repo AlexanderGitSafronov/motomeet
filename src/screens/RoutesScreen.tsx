@@ -9,6 +9,7 @@ import { SectionTitle } from '@/components/ui/ScreenHeader'
 import { LiveMap } from '@/components/map/LiveMap'
 import { routes } from '@/data/mock'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 import { formatKm } from '@/lib/format'
 import type { RouteStop } from '@/data/types'
 import type { LatLngExpression } from 'leaflet'
@@ -44,6 +45,7 @@ function StopRow({ stop, last }: { stop: RouteStop; last: boolean }) {
 
 export function RoutesScreen() {
   const pushToast = useAppStore((s) => s.pushToast)
+  const t = useT()
   const route = routes[0]
 
   return (
@@ -55,8 +57,8 @@ export function RoutesScreen() {
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-2">
         <div>
-          <h1 className="text-[28px] font-extrabold leading-tight text-text">Маршрути</h1>
-          <p className="text-sm text-text-secondary">Плануйте та катайте разом</p>
+          <h1 className="text-[28px] font-extrabold leading-tight text-text">{t('Маршрути')}</h1>
+          <p className="text-sm text-text-secondary">{t('Плануйте та катайте разом')}</p>
         </div>
         <IconButton label="Новий маршрут" variant="primary" onClick={() => pushToast({ title: 'Планувальник маршрутів незабаром', icon: 'info' })}>
           <Plus size={20} />
@@ -79,7 +81,7 @@ export function RoutesScreen() {
           </div>
           <div className="pointer-events-none absolute left-3 top-3 z-10">
             <Badge tone="success" icon={<span className="h-1.5 w-1.5 rounded-full bg-success" />}>
-              Активний маршрут
+              {t('Активний маршрут')}
             </Badge>
           </div>
         </div>
@@ -95,14 +97,14 @@ export function RoutesScreen() {
               <span className="text-sm font-medium text-text-secondary">Ви та {route.companions} райдери</span>
             </span>
             <Button leftIcon={<Play size={16} fill="currentColor" />} onClick={() => pushToast({ title: 'Заїзд розпочато — бережіть себе! 🏍️', icon: 'success' })}>
-              Старт
+              {t('Старт')}
             </Button>
           </div>
         </div>
       </div>
 
       {/* Planned stops */}
-      <SectionTitle className="mt-7">Заплановані зупинки</SectionTitle>
+      <SectionTitle className="mt-7">{t('Заплановані зупинки')}</SectionTitle>
       <div className="mt-4 px-5">
         {route.stops.map((s, i) => (
           <StopRow key={s.id} stop={s} last={i === route.stops.length - 1} />

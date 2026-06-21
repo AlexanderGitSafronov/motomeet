@@ -8,13 +8,17 @@ import { Avatar } from '@/components/ui/Avatar'
 import { FilterChips } from '@/components/ui/FilterChips'
 import { LiveMap } from '@/components/map/LiveMap'
 import { RidingNowRail } from '@/components/map/RidingNowRail'
-import { currentUser, ridingNowCount } from '@/data/mock'
+import { ridingNowCount } from '@/data/mock'
+import { useCurrentUser } from '@/store/useCurrentUser'
+import { useT } from '@/i18n'
 import type { Rider } from '@/data/types'
 
 type Filter = 'all' | 'riders' | 'events' | 'clubs'
 
 export function MapScreen() {
   const navigate = useNavigate()
+  const currentUser = useCurrentUser()
+  const t = useT()
   const [filter, setFilter] = useState<Filter>('all')
 
   const onRiderClick = (rider: Rider) => navigate(`/rider/${rider.id}`)
@@ -52,7 +56,7 @@ export function MapScreen() {
               <SearchBar
                 value=""
                 onChange={() => {}}
-                placeholder="Пошук райдерів, подій, клубів"
+                placeholder={t('Пошук райдерів, подій, клубів')}
                 className="glass pointer-events-none"
                 trailing={<SlidersHorizontal size={18} className="shrink-0 text-text-secondary" />}
               />
@@ -66,10 +70,10 @@ export function MapScreen() {
           <div className="pointer-events-auto px-4 pt-3">
             <FilterChips<Filter>
               options={[
-                { value: 'all', label: 'Усі', icon: <Layers size={15} /> },
-                { value: 'riders', label: 'Райдери', icon: <Bike size={15} /> },
-                { value: 'events', label: 'Події', icon: <Flame size={15} /> },
-                { value: 'clubs', label: 'Клуби', icon: <Shield size={15} /> },
+                { value: 'all', label: t('Усі'), icon: <Layers size={15} /> },
+                { value: 'riders', label: t('Райдери'), icon: <Bike size={15} /> },
+                { value: 'events', label: t('Події'), icon: <Flame size={15} /> },
+                { value: 'clubs', label: t('Клуби'), icon: <Shield size={15} /> },
               ]}
               value={filter}
               onChange={setFilter}
@@ -96,7 +100,7 @@ export function MapScreen() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-70" />
             <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
           </span>
-          <span className="text-sm font-semibold text-text">{ridingNowCount} райдерів зараз у дорозі</span>
+          <span className="text-sm font-semibold text-text">{ridingNowCount} {t('райдерів зараз у дорозі')}</span>
         </div>
 
         {/* FAB */}

@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { Map, CalendarDays, MessageCircle, Route, User } from 'lucide-react'
 import { cn } from '@/lib/cn'
+import { useT } from '@/i18n'
 
 const tabs = [
   { to: '/map', label: 'Карта', icon: Map },
@@ -15,6 +16,7 @@ const primaryPaths = new Set(['/map', '/events', '/chats', '/routes', '/profile'
 
 export function BottomNav() {
   const { pathname } = useLocation()
+  const t = useT()
   if (!primaryPaths.has(pathname)) return null
   return (
     <nav
@@ -38,7 +40,7 @@ export function BottomNav() {
               >
                 <Icon size={20} strokeWidth={isActive ? 2.6 : 2} />
                 <span className={cn('text-[10px] font-semibold', isActive ? 'opacity-100' : 'opacity-90')}>
-                  {label}
+                  {t(label)}
                 </span>
               </span>
             )}

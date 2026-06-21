@@ -7,12 +7,14 @@ import { IconButton } from '@/components/ui/IconButton'
 import { FilterChips } from '@/components/ui/FilterChips'
 import { ClubCard } from '@/components/cards/ClubCard'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 
 type Filter = 'all' | 'near' | 'touring' | 'adventure' | 'track'
 
 export function ClubsScreen() {
   const navigate = useNavigate()
   const clubs = useAppStore((s) => s.clubs)
+  const t = useT()
   const [filter, setFilter] = useState<Filter>('all')
 
   const filtered = clubs.filter((c) => {
@@ -32,8 +34,8 @@ export function ClubsScreen() {
           <ChevronLeft size={22} />
         </IconButton>
         <div className="min-w-0 flex-1">
-          <h1 className="text-[28px] font-extrabold leading-tight text-text">Клуби</h1>
-          <p className="text-sm text-text-secondary">284 клуби у світі</p>
+          <h1 className="text-[28px] font-extrabold leading-tight text-text">{t('Клуби')}</h1>
+          <p className="text-sm text-text-secondary">{t('284 клуби у світі')}</p>
         </div>
         <IconButton label="Фільтр клубів" variant="surface">
           <SlidersHorizontal size={20} />
@@ -44,10 +46,10 @@ export function ClubsScreen() {
       <div className="px-5 pt-4">
         <FilterChips<Filter>
           options={[
-            { value: 'all', label: 'Усі', icon: <Shield size={15} /> },
-            { value: 'near', label: 'Поруч', icon: <MapPin size={15} /> },
-            { value: 'touring', label: 'Туризм', icon: <Map size={15} /> },
-            { value: 'adventure', label: 'Пригоди', icon: <Compass size={15} /> },
+            { value: 'all', label: t('Усі'), icon: <Shield size={15} /> },
+            { value: 'near', label: t('Поруч'), icon: <MapPin size={15} /> },
+            { value: 'touring', label: t('Туризм'), icon: <Map size={15} /> },
+            { value: 'adventure', label: t('Пригоди'), icon: <Compass size={15} /> },
           ]}
           value={filter}
           onChange={setFilter}

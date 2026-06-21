@@ -10,6 +10,7 @@ import { Segmented } from '@/components/ui/Segmented'
 import { EventCard } from '@/components/cards/EventCard'
 import { ridingNowCount } from '@/data/mock'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 import { formatKm } from '@/lib/format'
 
 /** Desktop-only right rail mirroring the 1440 dashboard mockup. */
@@ -17,6 +18,7 @@ export function RidingNowRail() {
   const navigate = useNavigate()
   const riders = useAppStore((s) => s.riders)
   const events = useAppStore((s) => s.events)
+  const t = useT()
   const [tab, setTab] = useState<'riders' | 'events' | 'clubs'>('riders')
   const ridingNow = riders.filter((r) => r.ridingNow)
   const featured = ridingNow[0]
@@ -25,8 +27,8 @@ export function RidingNowRail() {
     <aside className="hidden h-full w-[360px] shrink-0 flex-col gap-4 overflow-y-auto border-l border-border bg-surface/30 p-5 no-scrollbar lg:flex">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-extrabold text-text">Зараз у дорозі</h2>
-          <p className="text-sm text-text-secondary">У радіусі 25 км від вас</p>
+          <h2 className="text-xl font-extrabold text-text">{t('Зараз у дорозі')}</h2>
+          <p className="text-sm text-text-secondary">{t('У радіусі 25 км від вас')}</p>
         </div>
         <Badge tone="success" icon={<span className="h-1.5 w-1.5 rounded-full bg-success" />}>
           {ridingNowCount}
@@ -35,9 +37,9 @@ export function RidingNowRail() {
 
       <Segmented
         options={[
-          { value: 'riders', label: 'Райдери' },
-          { value: 'events', label: 'Події' },
-          { value: 'clubs', label: 'Клуби' },
+          { value: 'riders', label: t('Райдери') },
+          { value: 'events', label: t('Події') },
+          { value: 'clubs', label: t('Клуби') },
         ]}
         value={tab}
         onChange={setTab}
@@ -65,7 +67,7 @@ export function RidingNowRail() {
               leftIcon={<MessageCircle size={16} />}
               onClick={() => navigate(`/rider/${featured.id}`)}
             >
-              Написати
+              {t('Написати')}
             </Button>
             <FollowButton riderId={featured.id} riderName={featured.name} size="sm" />
             <IconButton label="Навігація" variant="surface" size="sm" className="text-accent">
@@ -95,7 +97,7 @@ export function RidingNowRail() {
 
       {/* Upcoming events */}
       <div>
-        <h3 className="mb-3 text-lg font-bold text-text">Найближчі події</h3>
+        <h3 className="mb-3 text-lg font-bold text-text">{t('Найближчі події')}</h3>
         <EventCard event={events[0]} />
       </div>
     </aside>

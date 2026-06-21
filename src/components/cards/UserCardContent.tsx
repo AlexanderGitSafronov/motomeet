@@ -9,12 +9,14 @@ import { FollowButton } from '@/components/ui/FollowButton'
 import { Stat, StatRow } from '@/components/ui/Stat'
 import { formatKm, formatNumber } from '@/lib/format'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 import { conversations } from '@/data/mock'
 
 /** The rider card body shared by the map sheet (screen 03) and the desktop rail. */
 export function UserCardContent({ rider }: { rider: Rider }) {
   const navigate = useNavigate()
   const pushToast = useAppStore((s) => s.pushToast)
+  const t = useT()
 
   const openMessage = () => {
     const cv = conversations.find((c) => c.riderId === rider.id)
@@ -44,7 +46,7 @@ export function UserCardContent({ rider }: { rider: Rider }) {
         </div>
         <div className="text-right">
           <p className="text-2xl font-extrabold text-text">{formatKm(rider.distanceKm)}</p>
-          <p className="text-xs text-text-muted">від вас</p>
+          <p className="text-xs text-text-muted">{t('від вас')}</p>
         </div>
       </div>
 
@@ -52,16 +54,16 @@ export function UserCardContent({ rider }: { rider: Rider }) {
       {rider.ridingNow && (
         <p className="mt-3 flex items-center gap-2 text-sm text-text-secondary">
           <span className="h-2 w-2 rounded-full bg-success" />
-          <span className="font-semibold text-success">Зараз у дорозі</span>
+          <span className="font-semibold text-success">{t('Зараз у дорозі')}</span>
           {rider.lastActive && <span className="text-text-muted">· {rider.lastActive}</span>}
         </p>
       )}
 
       {/* Stats */}
       <StatRow className="mt-4 rounded-lg bg-surface-2 p-4">
-        <Stat value={formatNumber(rider.followers)} label="Підписники" />
-        <Stat value={formatNumber(rider.rides)} label="Заїзди" className="border-x border-border" />
-        <Stat value={formatNumber(rider.events)} label="Події" />
+        <Stat value={formatNumber(rider.followers)} label={t('Підписники')} />
+        <Stat value={formatNumber(rider.rides)} label={t('Заїзди')} className="border-x border-border" />
+        <Stat value={formatNumber(rider.events)} label={t('Події')} />
       </StatRow>
 
       {/* Latest ride */}
@@ -75,7 +77,7 @@ export function UserCardContent({ rider }: { rider: Rider }) {
           <div className="min-w-0 flex-1">
             <p className="truncate font-semibold text-text">{rider.latestRide.title}</p>
             <p className="truncate text-sm text-text-secondary">
-              {formatKm(rider.latestRide.distanceKm)} · останній заїзд
+              {formatKm(rider.latestRide.distanceKm)} · {t('останній заїзд')}
             </p>
           </div>
           <ChevronRight size={18} className="text-text-muted" />
@@ -85,7 +87,7 @@ export function UserCardContent({ rider }: { rider: Rider }) {
       {/* Actions */}
       <div className="mt-4 flex items-center gap-2.5">
         <Button variant="secondary" className="flex-1" leftIcon={<MessageCircle size={18} />} onClick={openMessage}>
-          Написати
+          {t('Написати')}
         </Button>
         <FollowButton riderId={rider.id} riderName={rider.name} size="md" />
         <IconButton label="Прокласти до райдера" variant="surface" size="md" className="text-accent">

@@ -30,6 +30,7 @@ import { formatNumber } from '@/lib/format'
 import { share } from '@/lib/share'
 import { useAppStore } from '@/store/useAppStore'
 import { useCurrentUser } from '@/store/useCurrentUser'
+import { useT } from '@/i18n'
 import type { Achievement } from '@/data/types'
 
 const achievementIcons = { medal: Medal, flame: Flame, mountain: Mountain, users: Users }
@@ -53,6 +54,7 @@ export function ProfileScreen() {
   const galleryItems = useAppStore((s) => s.galleryItems)
   const addGalleryPhoto = useAppStore((s) => s.addGalleryPhoto)
   const removeGalleryPhoto = useAppStore((s) => s.removeGalleryPhoto)
+  const t = useT()
   const fileRef = useRef<HTMLInputElement>(null)
 
   const [editOpen, setEditOpen] = useState(false)
@@ -118,16 +120,16 @@ export function ProfileScreen() {
 
         {/* Stats */}
         <div className="mx-5 mt-5 grid grid-cols-4 rounded-lg bg-surface-2 py-4">
-          <Stat value={formatNumber(u.followers)} label="Підписники" />
-          <Stat value={formatNumber(u.following)} label="Підписки" className="border-l border-border" />
-          <Stat value={formatNumber(u.rides)} label="Заїзди" className="border-l border-border" />
-          <Stat value={formatNumber(u.events)} label="Події" className="border-l border-border" />
+          <Stat value={formatNumber(u.followers)} label={t('Підписники')} />
+          <Stat value={formatNumber(u.following)} label={t('Підписки')} className="border-l border-border" />
+          <Stat value={formatNumber(u.rides)} label={t('Заїзди')} className="border-l border-border" />
+          <Stat value={formatNumber(u.events)} label={t('Події')} className="border-l border-border" />
         </div>
 
         {/* Actions */}
         <div className="mt-4 flex items-center gap-2.5 px-5">
           <Button className="flex-1" leftIcon={<Pencil size={16} />} onClick={() => setEditOpen(true)}>
-            Редагувати профіль
+            {t('Редагувати профіль')}
           </Button>
           <IconButton label="Поділитися профілем" variant="surface" size="lg" onClick={onShare}>
             <Share2 size={18} />
@@ -139,7 +141,7 @@ export function ProfileScreen() {
 
         {/* Achievements */}
         <SectionTitle className="mt-7" action={<span className="text-sm text-text-muted">12 отримано</span>}>
-          Досягнення
+          {t('Досягнення')}
         </SectionTitle>
         <div className="mt-3 grid grid-cols-4 gap-2 px-5">
           {achievements.map((a) => (
@@ -156,11 +158,11 @@ export function ProfileScreen() {
           className="mt-7"
           action={
             <button className="text-sm font-semibold text-primary" onClick={() => fileRef.current?.click()}>
-              Додати фото
+              {t('Додати фото')}
             </button>
           }
         >
-          Галерея
+          {t('Галерея')}
         </SectionTitle>
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickFile} aria-label="Завантажити фото" />
         <div className="mt-3 grid grid-cols-3 gap-1.5 px-5">

@@ -8,6 +8,7 @@ import { ClubIcon } from '@/components/ui/IconTile'
 import { FollowButton } from '@/components/ui/FollowButton'
 import { LiveMap } from '@/components/map/LiveMap'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 import { share } from '@/lib/share'
 import { fullDateTime, formatNumber, formatKm } from '@/lib/format'
 import type { LatLngExpression } from 'leaflet'
@@ -33,6 +34,7 @@ export function EventPageScreen() {
   const toggleJoin = useAppStore((s) => s.toggleEventJoin)
   const toggleSave = useAppStore((s) => s.toggleSaveEvent)
   const pushToast = useAppStore((s) => s.pushToast)
+  const t = useT()
 
   if (!event) {
     return (
@@ -110,7 +112,7 @@ export function EventPageScreen() {
               <div className="mt-4 flex items-center gap-3 rounded-md bg-surface-2 p-3">
                 <ClubIcon icon={club.icon} gradient={club.gradient} size={44} />
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs text-text-muted">Організатор</p>
+                  <p className="text-xs text-text-muted">{t('Організатор')}</p>
                   <p className="flex items-center gap-1.5 font-bold text-text">
                     {club.name} {club.verified && <VerifiedBadge size={14} />}
                   </p>
@@ -122,21 +124,21 @@ export function EventPageScreen() {
             {/* Stats */}
             <div className="mt-4 flex gap-2.5">
               {event.distanceKm ? (
-                <StatTile icon={<RouteIcon size={20} />} value={formatKm(event.distanceKm)} label="Маршрут" />
+                <StatTile icon={<RouteIcon size={20} />} value={formatKm(event.distanceKm)} label={t('Маршрут')} />
               ) : null}
               {event.duration ? (
-                <StatTile icon={<Clock size={20} />} value={event.duration} label="Тривалість" />
+                <StatTile icon={<Clock size={20} />} value={event.duration} label={t('Тривалість')} />
               ) : null}
-              <StatTile icon={<Users size={20} />} value={formatNumber(event.going)} label="Учасники" />
+              <StatTile icon={<Users size={20} />} value={formatNumber(event.going)} label={t('Учасники')} />
             </div>
 
             {/* About */}
-            <h2 className="mt-6 text-lg font-bold text-text">Про заїзд</h2>
+            <h2 className="mt-6 text-lg font-bold text-text">{t('Про заїзд')}</h2>
             <p className="mt-2 text-[15px] leading-relaxed text-text-secondary">{event.description}</p>
 
             {/* Location & route */}
             <div className="mt-6 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-text">Локація і маршрут</h2>
+              <h2 className="text-lg font-bold text-text">{t('Локація і маршрут')}</h2>
               <button
                 onClick={() => {
                   const q = encodeURIComponent(event.location)
@@ -176,7 +178,7 @@ export function EventPageScreen() {
             onClick={onJoin}
             leftIcon={joined ? <Check size={18} /> : undefined}
           >
-            {joined ? 'Ви учасник' : 'Долучитися'}
+            {joined ? t('Ви учасник') : t('Долучитися')}
           </Button>
         </div>
       </div>

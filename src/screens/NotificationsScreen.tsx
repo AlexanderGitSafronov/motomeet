@@ -8,6 +8,7 @@ import { Segmented } from '@/components/ui/Segmented'
 import { SectionLabel } from '@/components/ui/ScreenHeader'
 import { NotificationRow } from '@/components/cards/NotificationRow'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 import type { AppNotification } from '@/data/types'
 
 type Tab = 'all' | 'following' | 'events'
@@ -15,6 +16,7 @@ type Tab = 'all' | 'following' | 'events'
 export function NotificationsScreen() {
   const navigate = useNavigate()
   const notifications = useAppStore((s) => s.notifications)
+  const t = useT()
   const [tab, setTab] = useState<Tab>('all')
   const readMap = useAppStore((s) => s.readNotifications)
   const markAll = useAppStore((s) => s.markAllNotificationsRead)
@@ -49,9 +51,9 @@ export function NotificationsScreen() {
         <IconButton label="Назад" variant="surface" onClick={() => navigate(-1)} className="border-border bg-transparent">
           <ChevronLeft size={22} />
         </IconButton>
-        <h1 className="flex-1 text-2xl font-extrabold text-text">Сповіщення</h1>
+        <h1 className="flex-1 text-2xl font-extrabold text-text">{t('Сповіщення')}</h1>
         <button onClick={markAll} className="text-sm font-semibold text-primary">
-          Прочитати всі
+          {t('Прочитати всі')}
         </button>
       </div>
 
@@ -59,9 +61,9 @@ export function NotificationsScreen() {
       <div className="px-5 pt-4">
         <Segmented<Tab>
           options={[
-            { value: 'all', label: 'Усі' },
-            { value: 'following', label: 'Підписки' },
-            { value: 'events', label: 'Події' },
+            { value: 'all', label: t('Усі') },
+            { value: 'following', label: t('Підписки') },
+            { value: 'events', label: t('Події') },
           ]}
           value={tab}
           onChange={setTab}
@@ -71,7 +73,7 @@ export function NotificationsScreen() {
       {/* New */}
       {newGroup.length > 0 && (
         <>
-          <SectionLabel className="mt-6">Нові</SectionLabel>
+          <SectionLabel className="mt-6">{t('Нові')}</SectionLabel>
           <div className="mt-3 flex flex-col gap-3 px-5">
             {newGroup.map((n) => (
               <button key={n.id} onClick={() => onOpen(n)} className="text-left">
@@ -85,7 +87,7 @@ export function NotificationsScreen() {
       {/* Earlier */}
       {earlierGroup.length > 0 && (
         <>
-          <SectionLabel className="mt-6">Раніше</SectionLabel>
+          <SectionLabel className="mt-6">{t('Раніше')}</SectionLabel>
           <div className="mt-3 flex flex-col gap-3 px-5">
             {earlierGroup.map((n) => (
               <button key={n.id} onClick={() => onOpen(n)} className="text-left">

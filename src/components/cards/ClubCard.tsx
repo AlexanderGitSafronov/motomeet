@@ -5,6 +5,7 @@ import { ClubIcon } from '@/components/ui/IconTile'
 import { VerifiedBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 import { formatNumber } from '@/lib/format'
 
 export function ClubCard({ club }: { club: Club }) {
@@ -12,6 +13,7 @@ export function ClubCard({ club }: { club: Club }) {
   const joined = useAppStore((s) => s.joinedClubs[club.id] ?? club.joined ?? false)
   const toggleJoin = useAppStore((s) => s.toggleClubJoin)
   const pushToast = useAppStore((s) => s.pushToast)
+  const t = useT()
 
   const onJoin = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -41,7 +43,7 @@ export function ClubCard({ club }: { club: Club }) {
         </p>
       </div>
       <Button size="sm" variant={joined ? 'primary' : 'soft'} onClick={onJoin} className="shrink-0">
-        {joined ? 'Учасник' : 'Вступити'}
+        {joined ? t('Учасник') : t('Вступити')}
       </Button>
     </article>
   )

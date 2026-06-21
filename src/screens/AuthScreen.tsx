@@ -8,6 +8,7 @@ import { Sheet } from '@/components/ui/Sheet'
 import { Button } from '@/components/ui/Button'
 import { img } from '@/data/images'
 import { useAppStore } from '@/store/useAppStore'
+import { useT } from '@/i18n'
 
 function GoogleIcon() {
   return (
@@ -25,6 +26,7 @@ export function AuthScreen() {
   const signInApi = useAppStore((s) => s.signIn)
   const registerApi = useAppStore((s) => s.register)
   const pushToast = useAppStore((s) => s.pushToast)
+  const t = useT()
 
   const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [name, setName] = useState('')
@@ -78,7 +80,7 @@ export function AuthScreen() {
         <div className="flex flex-1 flex-col items-center justify-center gap-3 pt-5 text-center">
           <LogoTile size={60} />
           <h1 className="font-display text-[36px] leading-none tracking-wide text-white">MOTOMEET</h1>
-          <p className="text-[15px] font-medium text-text-secondary">Знайди свою команду. Катай разом.</p>
+          <p className="text-[15px] font-medium text-text-secondary">{t('Знайди свою команду. Катай разом.')}</p>
         </div>
 
         {/* Glassmorphic form panel */}
@@ -89,8 +91,8 @@ export function AuthScreen() {
         >
           <Segmented
             options={[
-              { value: 'login', label: 'Увійти' },
-              { value: 'signup', label: 'Реєстрація' },
+              { value: 'login', label: t('Увійти') },
+              { value: 'signup', label: t('Реєстрація') },
             ]}
             value={mode}
             onChange={(m) => {
@@ -145,7 +147,7 @@ export function AuthScreen() {
           {mode === 'login' && (
             <div className="text-right">
               <button type="button" onClick={() => setForgotOpen(true)} className="text-[13px] font-semibold text-primary">
-                Забули пароль?
+                {t('Забули пароль?')}
               </button>
             </div>
           )}
@@ -157,13 +159,13 @@ export function AuthScreen() {
             disabled={busy}
             className="flex h-[52px] items-center justify-center gap-2 rounded-2xl bg-primary text-base font-bold text-on-primary shadow-glow transition-transform active:scale-[0.98] disabled:opacity-70"
           >
-            {busy ? 'Зачекайте…' : mode === 'login' ? 'Увійти' : 'Створити акаунт'}
+            {busy ? t('Зачекайте…') : mode === 'login' ? t('Увійти') : t('Створити акаунт')}
             <ArrowRight size={18} />
           </button>
 
           <div className="flex items-center gap-3">
             <span className="h-px flex-1 bg-border" />
-            <span className="text-xs font-medium text-text-muted">або увійти через</span>
+            <span className="text-xs font-medium text-text-muted">{t('або увійти через')}</span>
             <span className="h-px flex-1 bg-border" />
           </div>
 
@@ -185,7 +187,7 @@ export function AuthScreen() {
           </div>
 
           <p className="text-center text-[11px] font-medium text-text-muted">
-            Продовжуючи, ви приймаєте Умови та Політику конфіденційності
+            {t('Продовжуючи, ви приймаєте Умови та Політику конфіденційності')}
           </p>
         </form>
       </div>
