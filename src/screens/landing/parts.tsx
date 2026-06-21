@@ -1,7 +1,52 @@
 import type { ReactNode } from 'react'
 import { Apple, Play } from 'lucide-react'
-import { useReveal } from '@/hooks/useReveal'
+import { useReveal, useParallax } from '@/hooks/useReveal'
 import { cn } from '@/lib/cn'
+
+/** Translate children on scroll for a layered parallax effect. */
+export function Parallax({
+  children,
+  speed = 0.15,
+  tilt,
+  scale,
+  className,
+}: {
+  children: ReactNode
+  speed?: number
+  tilt?: number
+  scale?: boolean
+  className?: string
+}) {
+  const ref = useParallax<HTMLDivElement>(speed, { tilt, scale })
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
+  )
+}
+
+/** A soft animated colour orb used as a parallax background accent. */
+export function GlowOrb({
+  color,
+  size = 520,
+  className,
+  speed = 0.08,
+}: {
+  color: string
+  size?: number
+  className?: string
+  speed?: number
+}) {
+  const ref = useParallax<HTMLDivElement>(speed)
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className={cn('animate-glow-pulse pointer-events-none absolute rounded-full', className)}
+      style={{ width: size, height: size, background: `radial-gradient(circle, ${color}, transparent 70%)` }}
+    />
+  )
+}
 
 /** Wrap children so they animate up into view on scroll. */
 export function Reveal({

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import { LogoTile } from '@/components/brand/Logo'
 import { useReveal, useCountUp } from '@/hooks/useReveal'
-import { Reveal, StoreButtons, PhoneFrame, FloatChip, SectionHead } from './parts'
+import { Reveal, StoreButtons, PhoneFrame, FloatChip, SectionHead, Parallax, GlowOrb } from './parts'
 import { cn } from '@/lib/cn'
 
 const IMG = '/img'
@@ -72,7 +72,9 @@ function Nav() {
 function Hero() {
   return (
     <section id="top" className="relative isolate overflow-hidden">
-      <img src={`${IMG}/generated-1782058784638.png`} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <Parallax speed={0.16} scale className="absolute -inset-y-[12%] inset-x-0">
+        <img src={`${IMG}/generated-1782058784638.png`} alt="" className="h-full w-full object-cover" />
+      </Parallax>
       <div className="absolute inset-0 bg-[#0F172A]/30" />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, #0F172A 0%, #0F172Af2 30%, #0F172A55 62%, transparent 100%)' }} />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 45%, #0F172A 100%)' }} />
@@ -115,8 +117,10 @@ function Hero() {
         </div>
 
         {/* Right: phone */}
-        <div className="animate-float relative">
-          <PhoneFrame src="/landing/screen-map.png" glow="#8B5CF680" className="w-[300px] md:w-[330px]" />
+        <Parallax speed={0.05} tilt={-3} className="relative">
+          <div className="animate-float-slow">
+            <PhoneFrame src="/landing/screen-map.png" glow="#8B5CF680" className="w-[300px] md:w-[330px]" />
+          </div>
           <FloatChip
             className="absolute -left-10 top-24 hidden md:flex"
             icon={<Flag size={16} className="text-white" />}
@@ -131,7 +135,7 @@ function Hero() {
             title="Iron Wolves MC"
             subtitle="1,240 members"
           />
-        </div>
+        </Parallax>
       </div>
     </section>
   )
@@ -257,8 +261,13 @@ const SHOWCASE = [
 function Showcase() {
   return (
     <section className="relative isolate overflow-hidden bg-bg">
-      <img src={`${IMG}/generated-1782059590754.png`} alt="" className="absolute inset-0 h-full w-full object-cover opacity-[0.06]" />
+      <Parallax speed={0.1} className="absolute -inset-y-[10%] inset-x-0">
+        <img src={`${IMG}/generated-1782059590754.png`} alt="" className="h-full w-full object-cover opacity-[0.06]" />
+      </Parallax>
       <div className="absolute inset-0 bg-bg/80" />
+      <GlowOrb color="#3B82F633" size={560} className="left-[58%] top-[3%]" />
+      <GlowOrb color="#8B5CF63a" size={620} className="left-[-12%] top-[40%]" speed={0.12} />
+      <GlowOrb color="#22C55E2e" size={560} className="left-[60%] top-[72%]" />
       <div className="relative mx-auto max-w-[1240px] px-5 py-20 md:px-12">
         <SectionHead eyebrow="See it in action" title="BUILT FOR THE WAY YOU RIDE" />
         <div className="mt-10 flex flex-col gap-24">
@@ -288,9 +297,11 @@ function Showcase() {
               </Reveal>
               {/* Phone */}
               <Reveal delay={1} className="relative flex flex-1 justify-center">
-                <PhoneFrame src={s.screen} glow={`${s.glow}66`} />
+                <Parallax speed={0.07} tilt={s.reverse ? 3 : -3} className="relative">
+                  <PhoneFrame src={s.screen} glow={`${s.glow}66`} />
+                </Parallax>
                 <FloatChip
-                  className={cn('absolute bottom-16', s.reverse ? '-right-4 md:-right-10' : '-left-4 md:-left-10')}
+                  className={cn('absolute bottom-16 z-10', s.reverse ? '-right-4 md:-right-10' : '-left-4 md:-left-10')}
                   icon={s.chip.icon}
                   tint={s.chip.tint}
                   title={s.chip.title}
@@ -316,13 +327,17 @@ function HowItWorks() {
     <section id="routes" className="bg-[#0B1220]">
       <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-12">
         <SectionHead eyebrow="Get riding in minutes" title="THREE STEPS TO YOUR NEXT RIDE" />
-        <div className="mt-14 grid gap-5 md:grid-cols-3">
+        <div className="relative mt-14 grid gap-5 md:grid-cols-3">
+          <div className="pointer-events-none absolute left-[16%] right-[16%] top-[72px] hidden h-px bg-gradient-to-r from-[#8B5CF600] via-primary/50 to-[#22C55E00] md:block" />
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={((i % 3) + 1) as 1 | 2 | 3}>
-              <div className="h-full rounded-[22px] border border-border bg-surface p-8">
+              <div className="group/step relative z-10 h-full rounded-[22px] border border-border bg-surface p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-glow">
                 <div className="flex items-center justify-between">
-                  <span className="font-display text-[44px] leading-none" style={{ color: s.color }}>{s.n}</span>
-                  <span className="grid h-12 w-12 place-items-center rounded-full" style={{ background: `${s.color}26`, color: s.color }}>
+                  <span className="font-display text-[44px] leading-none transition-transform duration-300 group-hover/step:scale-110" style={{ color: s.color }}>{s.n}</span>
+                  <span
+                    className="grid h-12 w-12 place-items-center rounded-full transition-transform duration-300 group-hover/step:rotate-6 group-hover/step:scale-110"
+                    style={{ background: `${s.color}26`, color: s.color }}
+                  >
                     <s.icon size={24} />
                   </span>
                 </div>
@@ -351,7 +366,7 @@ function Testimonials() {
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {TESTIMONIALS.map((tt, i) => (
             <Reveal key={tt.name} delay={((i % 3) + 1) as 1 | 2 | 3}>
-              <figure className="flex h-full flex-col gap-5 rounded-[22px] border border-border bg-surface p-8">
+              <figure className="flex h-full flex-col gap-5 rounded-[22px] border border-border bg-surface p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-glow">
                 <span className="text-warning">★★★★★</span>
                 <blockquote className="flex-1 text-[16px] leading-relaxed text-text">{tt.quote}</blockquote>
                 <figcaption className="flex items-center gap-3">

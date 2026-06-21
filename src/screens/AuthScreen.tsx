@@ -30,8 +30,8 @@ export function AuthScreen() {
 
   const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('markus@motomeet.cc')
-  const [password, setPassword] = useState('ridetogether')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)

@@ -83,12 +83,9 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },
-  // Local dev proxies /api to the deployed Vercel API (Neon-backed).
-  server: {
-    proxy: {
-      '/api': { target: 'https://motomeet-xi.vercel.app', changeOrigin: true, secure: true },
-    },
-  },
+  // For local dev against the live backend, run with
+  //   VITE_API_URL=https://motomeet-xi.vercel.app npm run dev
+  // (otherwise the app runs in offline demo mode). Production uses same-origin /api.
   test: {
     globals: true,
     environment: 'jsdom',
