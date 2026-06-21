@@ -15,11 +15,17 @@ export function DirectMessageScreen() {
   const conversation = id ? conversationsById[id] : undefined
   const threads = useAppStore((s) => s.threads)
   const send = useAppStore((s) => s.sendMessage)
+  const markConversationRead = useAppStore((s) => s.markConversationRead)
   const endRef = useRef<HTMLDivElement>(null)
 
   const sent = (id && threads[id]) || []
   const seed = (id && dmSeedThreads[id]) || []
   const messages = [...seed, ...sent]
+
+  // Opening a conversation clears its unread badge.
+  useEffect(() => {
+    if (id) markConversationRead(id)
+  }, [id, markConversationRead])
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' })

@@ -102,6 +102,8 @@ interface AppState {
   // ---- direct + community messages (client-side, persisted) ----
   threads: Record<string, ChatMessage[]>
   sendMessage: (conversationId: string, text: string, image?: string) => void
+  readConversations: Record<string, boolean>
+  markConversationRead: (conversationId: string) => void
   communityMessages: ChatMessage[]
   sendCommunityMessage: (text: string, image?: string) => void
 
@@ -333,8 +335,14 @@ export const useAppStore = create<AppState>()(
           text: image ? undefined : trimmed,
           image,
         }
-        set((s) => ({ threads: { ...s.threads, [conversationId]: [...(s.threads[conversationId] ?? []), msg] } }))
+        set((s) => ({
+          threads: { ...s.threads, [conversationId]: [...(s.threads[conversationId] ?? []), msg] },
+          readConversations: { ...s.readConversations, [conversationId]: true },
+        }))
       },
+      readConversations: {},
+      markConversationRead: (conversationId) =>
+        set((s) => ({ readConversations: { ...s.readConversations, [conversationId]: true } })),
       communityMessages: [],
       sendCommunityMessage: (text, image) => {
         const trimmed = text.trim()
@@ -372,8 +380,10 @@ export const useAppStore = create<AppState>()(
         settings: s.settings,
         savedEvents: s.savedEvents,
         visitedStops: s.visitedStops,
+        customRoutes: s.customRoutes,
         threads: s.threads,
         communityMessages: s.communityMessages,
+        readConversations: s.readConversations,
       }),
     }
   )

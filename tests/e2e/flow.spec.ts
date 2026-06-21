@@ -44,6 +44,20 @@ test('messages → conversation → send a message', async ({ page }) => {
   await input.fill('Уже в дорозі! 🏍️')
   await page.getByLabel('Надіслати повідомлення').click()
   await expect(page.getByText('Уже в дорозі! 🏍️')).toBeVisible()
+  // Back in the list: the row shows my last message and the unread badge is gone
+  await page.getByRole('button', { name: 'Назад' }).click()
+  await expect(page.getByRole('heading', { name: 'Повідомлення' })).toBeVisible()
+  await expect(page.getByText('Уже в дорозі! 🏍️')).toBeVisible()
+})
+
+test('routes: start ride toggles to finish', async ({ page }) => {
+  await login(page)
+  await page.getByRole('link', { name: 'Маршрути' }).click()
+  await expect(page.getByRole('heading', { name: 'Маршрути' })).toBeVisible()
+  await page.getByRole('button', { name: 'Старт', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Завершити', exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Завершити', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Старт', exact: true })).toBeVisible()
 })
 
 test('routes screen shows active route and stops', async ({ page }) => {

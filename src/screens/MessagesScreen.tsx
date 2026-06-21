@@ -14,11 +14,26 @@ import { useT } from '@/i18n'
 export function MessagesScreen() {
   const navigate = useNavigate()
   const riders = useAppStore((s) => s.riders)
+  const threads = useAppStore((s) => s.threads)
+  const readConversations = useAppStore((s) => s.readConversations)
   const t = useT()
   const [query, setQuery] = useState('')
   const online = riders.filter((r) => r.online).slice(0, 6)
 
-  const filtered = conversations.filter((c) =>
+  // Reflect the user's own last message + read state in each conversation row.
+  const enriched = conversations.map((c) => {
+    const sent = threads[c.id]
+    const last = sent && sent.length ? sent[sent.length - 1] : null
+    return {
+      ...c,
+      lastMessage: last ? (last.kind === 'image' ? 'Фото' : last.text ?? c.lastMessage) : c.lastMessage,
+      lastKind: last ? last.kind : c.lastKind,
+      time: last ? last.time : c.time,
+      unread: readConversations[c.id] || (sent && sent.length) ? 0 : c.unread,
+    }
+  })
+
+  const filtered = enriched.filter((c) =>
     c.name.toLowerCase().includes(query.trim().toLowerCase())
   )
 
