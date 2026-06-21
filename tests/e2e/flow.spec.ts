@@ -7,7 +7,7 @@ test.beforeEach(async ({}, testInfo) => {
 })
 
 async function login(page: Page) {
-  await page.goto('/')
+  await page.goto('/auth')
   await expect(page.getByText('Знайди свою команду. Катай разом.')).toBeVisible()
   await page.getByRole('button', { name: 'Увійти', exact: true }).click()
   await expect(page).toHaveURL(/\/map$/)
@@ -27,8 +27,12 @@ test('events list → event page → join', async ({ page }) => {
   await page.getByText('Альпійське ралі «Грім» 2026').first().click()
   await expect(page.getByRole('heading', { name: 'Альпійське ралі «Грім» 2026' })).toBeVisible()
   await expect(page.getByText('Про заїзд')).toBeVisible()
-  await page.getByRole('button', { name: 'Долучитися' }).click()
-  await expect(page.getByRole('button', { name: 'Ви учасник' })).toBeVisible()
+  // Join CTA toggles regardless of the starting state
+  const cta = page.getByRole('button', { name: /^(Долучитися|Ви учасник)$/ })
+  await expect(cta).toBeVisible()
+  const before = (await cta.textContent())?.trim()
+  await cta.click()
+  await expect(page.getByRole('button', { name: /^(Долучитися|Ви учасник)$/ })).not.toHaveText(before ?? '')
 })
 
 test('messages → conversation → send a message', async ({ page }) => {

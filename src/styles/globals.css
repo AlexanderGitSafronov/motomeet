@@ -147,6 +147,71 @@
   }
 }
 
+/* ============================================================
+   Landing page animations
+   ============================================================ */
+@keyframes mm-reveal-up {
+  from { opacity: 0; transform: translateY(34px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes mm-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+@keyframes mm-float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-1deg); }
+}
+@keyframes mm-glow-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.08); }
+}
+@keyframes mm-marker-pop {
+  0% { opacity: 0; transform: scale(0.4) translateY(8px); }
+  60% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes mm-shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+@keyframes mm-pulse-ping {
+  0% { transform: scale(0.7); opacity: 0.8; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Reveal: hidden by default, animates when `.is-shown` is added */
+.reveal {
+  opacity: 0;
+}
+.reveal.is-shown {
+  animation: mm-reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.reveal-delay-1.is-shown { animation-delay: 0.08s; }
+.reveal-delay-2.is-shown { animation-delay: 0.16s; }
+.reveal-delay-3.is-shown { animation-delay: 0.24s; }
+.reveal-delay-4.is-shown { animation-delay: 0.32s; }
+.reveal-delay-5.is-shown { animation-delay: 0.4s; }
+
+.animate-float { animation: mm-float 6s ease-in-out infinite; }
+.animate-float-slow { animation: mm-float-slow 8s ease-in-out infinite; }
+.animate-glow-pulse { animation: mm-glow-pulse 7s ease-in-out infinite; }
+
+/* Gradient shimmer text for the wordmark / accents */
+.text-shimmer {
+  background: linear-gradient(100deg, #a78bfa 20%, #ffffff 40%, #60a5fa 60%, #a78bfa 80%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: mm-shimmer 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.is-shown { opacity: 1; animation: none; }
+  .animate-float, .animate-float-slow, .animate-glow-pulse, .text-shimmer { animation: none; }
+}
+
 /* Safe-area helpers for notch / home indicator (PWA standalone) */
 .pt-safe {
   padding-top: max(env(safe-area-inset-top), 0px);

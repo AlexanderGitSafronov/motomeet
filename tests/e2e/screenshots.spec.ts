@@ -20,7 +20,9 @@ const DESKTOP = { width: 1440, height: 900 }
 
 async function settle(page: Page, ms = 1400) {
   await page.addStyleTag({
-    content: '*{animation:none!important;transition:none!important;caret-color:transparent!important}',
+    content:
+      '*{animation:none!important;transition:none!important;caret-color:transparent!important}' +
+      '.reveal{opacity:1!important;transform:none!important}',
   }).catch(() => {})
   await page.waitForTimeout(ms)
 }
@@ -33,9 +35,23 @@ async function shot(page: Page, name: string, full = true) {
 test('capture all screens', async ({ page }) => {
   test.setTimeout(180_000)
 
+  // 00 — landing (desktop, full page) — scroll through to trigger reveal animations
+  await page.setViewportSize(DESKTOP)
+  await page.goto('/')
+  await page.evaluate(async () => {
+    const step = window.innerHeight * 0.7
+    for (let y = 0; y < document.body.scrollHeight; y += step) {
+      window.scrollTo(0, y)
+      await new Promise((r) => setTimeout(r, 120))
+    }
+    window.scrollTo(0, 0)
+  })
+  await page.waitForTimeout(600)
+  await shot(page, '00-landing', true)
+
   // 01 — auth (before login)
   await page.setViewportSize(MOBILE)
-  await page.goto('/')
+  await page.goto('/auth')
   await shot(page, '01-auth', false)
 
   // sign in

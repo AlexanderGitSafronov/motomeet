@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { useAppStore } from '@/store/useAppStore'
 
+import { Landing } from '@/screens/landing/Landing'
 import { AuthScreen } from '@/screens/AuthScreen'
 import { MapScreen } from '@/screens/MapScreen'
 import { RiderCardScreen } from '@/screens/RiderCardScreen'
@@ -26,6 +27,7 @@ function RequireAuth() {
 }
 
 export const router = createBrowserRouter([
+  { path: '/', element: <Landing /> },
   { path: '/auth', element: <AuthScreen /> },
   {
     element: <RequireAuth />,
@@ -33,7 +35,6 @@ export const router = createBrowserRouter([
       {
         element: <AppShell />,
         children: [
-          { index: true, element: <Navigate to="/map" replace /> },
           { path: 'map', element: <MapScreen /> },
           { path: 'rider/:id', element: <RiderCardScreen /> },
           { path: 'search', element: <SearchScreen /> },
@@ -52,5 +53,5 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  { path: '*', element: <Navigate to="/map" replace /> },
+  { path: '*', element: <Navigate to="/" replace /> },
 ])

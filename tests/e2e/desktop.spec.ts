@@ -6,7 +6,7 @@ test.beforeEach(async ({}, testInfo) => {
 })
 
 test('desktop shows sidebar nav and riding-now rail', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/auth')
   await page.getByRole('button', { name: 'Увійти', exact: true }).click()
   await expect(page).toHaveURL(/\/map$/)
 
@@ -25,7 +25,7 @@ test('desktop shows sidebar nav and riding-now rail', async ({ page }) => {
 })
 
 test('desktop events grid renders two columns of cards', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/auth')
   await page.getByRole('button', { name: 'Увійти', exact: true }).click()
   await page.getByRole('link', { name: 'Події' }).click()
   await expect(page.getByRole('heading', { name: 'Події' })).toBeVisible()
