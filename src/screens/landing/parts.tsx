@@ -81,7 +81,7 @@ export function StoreButtons({ className }: { className?: string }) {
       >
         <Apple size={26} fill="currentColor" />
         <span className="flex flex-col leading-none">
-          <span className="text-[11px] font-medium opacity-70">Download on the</span>
+          <span className="text-[11px] font-medium opacity-70">Завантажити в</span>
           <span className="text-[17px] font-bold">App Store</span>
         </span>
       </a>
@@ -91,7 +91,7 @@ export function StoreButtons({ className }: { className?: string }) {
       >
         <Play size={24} fill="currentColor" />
         <span className="flex flex-col leading-none">
-          <span className="text-[11px] font-medium opacity-70">GET IT ON</span>
+          <span className="text-[11px] font-medium opacity-70">Завантажити з</span>
           <span className="text-[17px] font-bold">Google Play</span>
         </span>
       </a>

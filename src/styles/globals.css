@@ -86,6 +86,11 @@
     text-rendering: optimizeLegibility;
     overscroll-behavior-y: none;
   }
+  /* Oswald (the display face) needs an explicit heavy weight; Anton didn't. */
+  .font-display {
+    font-weight: 700;
+    letter-spacing: 0.005em;
+  }
   ::selection {
     background: var(--mm-primary);
     color: #fff;

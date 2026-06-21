@@ -10,11 +10,11 @@ describe('Landing', () => {
         <Landing />
       </MemoryRouter>
     )
-    expect(screen.getByRole('heading', { name: /RIDE THE WORLD/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'ONE APP FOR THE WHOLE RIDE' })).toBeInTheDocument()
-    expect(screen.getByText('Live rider map')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'RIDERS ARE TALKING' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Get the app' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /КАТАЙ ПО СВІТУ/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'ОДИН ЗАСТОСУНОК ДЛЯ ВСЬОГО ЗАЇЗДУ' })).toBeInTheDocument()
+    expect(screen.getByText('Жива карта райдерів')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'РАЙДЕРИ ГОВОРЯТЬ' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Завантажити застосунок' })).toBeInTheDocument()
   })
 
   it('links download buttons to /auth', () => {

@@ -32,7 +32,12 @@ function Nav() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-  const links = ['Features', 'Events', 'Clubs', 'Routes', 'Pricing']
+  const links = [
+    { label: 'Можливості', href: '#features' },
+    { label: 'Маршрути', href: '#routes' },
+    { label: 'Спільнота', href: '#clubs' },
+    { label: 'Ціни', href: '#pricing' },
+  ]
   return (
     <header
       className={cn(
@@ -47,20 +52,20 @@ function Nav() {
         </a>
         <nav className="hidden items-center gap-9 lg:flex">
           {links.map((l) => (
-            <a key={l} href={`#${l.toLowerCase()}`} className="text-[15px] font-medium text-text-secondary transition-colors hover:text-text">
-              {l}
+            <a key={l.href} href={l.href} className="text-[15px] font-medium text-text-secondary transition-colors hover:text-text">
+              {l.label}
             </a>
           ))}
         </nav>
         <div className="flex items-center gap-4">
           <Link to="/auth" className="hidden text-[15px] font-semibold text-text sm:block">
-            Log in
+            Увійти
           </Link>
           <Link
             to="/auth"
             className="rounded-full bg-primary px-5 py-2.5 text-[15px] font-semibold text-on-primary shadow-glow-sm transition-all hover:bg-primary-hover active:scale-95"
           >
-            Get the app
+            Завантажити застосунок
           </Link>
         </div>
       </div>
@@ -89,20 +94,20 @@ function Hero() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-70" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
               </span>
-              128 riders riding now near you
+              128 райдерів зараз у дорозі поруч
             </span>
           </Reveal>
           <Reveal delay={1}>
             <h1 className="mt-6 font-display text-[clamp(44px,7vw,76px)] leading-[0.96] tracking-tight text-white">
-              FIND YOUR CREW.
+              ЗНАЙДИ СВОЮ КОМАНДУ.
               <br />
-              RIDE THE <span className="text-shimmer">WORLD.</span>
+              КАТАЙ ПО <span className="text-shimmer">СВІТУ.</span>
             </h1>
           </Reveal>
           <Reveal delay={2}>
             <p className="mt-6 max-w-lg text-[18px] leading-relaxed text-slate-300">
-              MotoMeet puts every rider, club and rally on one live map. See who's riding near you, join real events,
-              plan epic routes — and never ride alone again.
+              MotoMeet збирає кожного райдера, клуб і ралі на одній живій карті. Дивись, хто катає поруч, приєднуйся до
+              справжніх подій, плануй епічні маршрути — і більше ніколи не катай наодинці.
             </p>
           </Reveal>
           <Reveal delay={3}>
@@ -111,7 +116,7 @@ function Hero() {
           <Reveal delay={4}>
             <div className="mt-6 flex items-center gap-3">
               <span className="text-lg tracking-tight text-warning">★★★★★</span>
-              <span className="text-[15px] font-medium text-slate-300">4.9 · loved by 12,000+ riders</span>
+              <span className="text-[15px] font-medium text-slate-300">4.9 · обожнюють 12 000+ райдерів</span>
             </div>
           </Reveal>
         </div>
@@ -125,15 +130,15 @@ function Hero() {
             className="absolute -left-10 top-24 hidden md:flex"
             icon={<Flag size={16} className="text-white" />}
             tint="#3B82F6"
-            title="42 going"
-            subtitle="Alpine Thunder Rally"
+            title="42 учасники"
+            subtitle="Ралі «Альпійський грім»"
           />
           <FloatChip
             className="absolute -right-8 bottom-28 hidden md:flex"
             icon={<Users size={16} className="text-white" />}
             tint="#22C55E"
-            title="Iron Wolves MC"
-            subtitle="1,240 members"
+            title="Залізні Вовки MC"
+            subtitle="1 240 учасників"
           />
         </Parallax>
       </div>
@@ -143,10 +148,10 @@ function Hero() {
 
 // ---------------------------------------------------------------- Stats
 const STATS = [
-  { num: 50, suffix: 'K+', label: 'Active riders' },
-  { num: 1200, suffix: '+', label: 'Clubs & crews', comma: true },
-  { num: 8500, suffix: '+', label: 'Rallies & rides', comma: true },
-  { num: 2, suffix: 'M+', label: 'Km ridden together' },
+  { num: 50, suffix: 'K+', label: 'Активних райдерів' },
+  { num: 1200, suffix: '+', label: 'Клубів і команд', comma: true },
+  { num: 8500, suffix: '+', label: 'Ралі та заїздів', comma: true },
+  { num: 2, suffix: 'M+', label: 'Км пройдено разом' },
 ]
 function Stats() {
   const { ref, shown } = useReveal<HTMLDivElement>()
@@ -154,7 +159,7 @@ function Stats() {
     <section className="border-y border-border bg-bg">
       <div ref={ref} className="mx-auto max-w-[1240px] px-5 py-14 md:px-12">
         <p className="text-center text-[13px] font-bold uppercase tracking-[0.2em] text-text-muted">
-          Trusted by riders in 40+ countries
+          Нам довіряють райдери у 40+ країнах
         </p>
         <div className="mt-8 grid grid-cols-2 gap-y-8 md:flex md:items-center md:justify-between">
           {STATS.map((s, i) => (
@@ -170,7 +175,7 @@ function Stats() {
 }
 function StatItem({ stat, active }: { stat: (typeof STATS)[number]; active: boolean }) {
   const v = useCountUp(stat.num, active)
-  const shown = stat.comma ? v.toLocaleString('en-US') : String(v)
+  const shown = stat.comma ? v.toLocaleString('uk-UA') : String(v)
   return (
     <div className="flex flex-1 flex-col items-center text-center">
       <span className="font-display text-[clamp(36px,5vw,48px)] tracking-tight text-text">
@@ -184,21 +189,21 @@ function StatItem({ stat, active }: { stat: (typeof STATS)[number]; active: bool
 
 // ---------------------------------------------------------------- Features
 const FEATURES = [
-  { icon: Map, color: '#8B5CF6', title: 'Live rider map', desc: 'Every rider, club and event near you — live on one beautiful map.' },
-  { icon: Flag, color: '#3B82F6', title: 'Events & rallies', desc: 'Discover rallies and track days. RSVP in a tap, get the route and crew.' },
-  { icon: Users, color: '#22C55E', title: 'Clubs & crews', desc: 'Join an MC or start your own. Share rides and chat with your members.' },
-  { icon: RouteIcon, color: '#F59E0B', title: 'Plan epic routes', desc: 'Build twisty routes, save favorites and navigate turn-by-turn.' },
-  { icon: MessageCircle, color: '#8B5CF6', title: 'Real-time chat', desc: 'Message riders and clubs, drop into group chats, plan the next ride.' },
-  { icon: ShieldCheck, color: '#EF4444', title: 'Ride safe', desc: 'Live location, SOS alerts and check-ins keep your crew together.' },
+  { icon: Map, color: '#8B5CF6', title: 'Жива карта райдерів', desc: 'Кожен райдер, клуб і подія поруч — наживо на одній красивій карті.' },
+  { icon: Flag, color: '#3B82F6', title: 'Події та ралі', desc: 'Знаходь ралі та трек-дні. Приєднуйся в один тап — отримуй маршрут і команду.' },
+  { icon: Users, color: '#22C55E', title: 'Клуби та команди', desc: 'Вступай до мотоклубу або створи власний. Діліться заїздами й спілкуйтесь.' },
+  { icon: RouteIcon, color: '#F59E0B', title: 'Плануй епічні маршрути', desc: 'Будуй звивисті маршрути, зберігай улюблені та їдь з покроковою навігацією.' },
+  { icon: MessageCircle, color: '#8B5CF6', title: 'Чат у реальному часі', desc: 'Пиши райдерам і клубам, заходь у групові чати, плануй наступний заїзд.' },
+  { icon: ShieldCheck, color: '#EF4444', title: 'Катай безпечно', desc: 'Жива геолокація, SOS-сигнали та чек-іни тримають команду разом.' },
 ]
 function Features() {
   return (
     <section id="features" className="bg-bg">
       <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-12">
         <SectionHead
-          eyebrow="Everything you need to ride"
-          title="ONE APP FOR THE WHOLE RIDE"
-          subtitle="From the first marker on the map to the last mile of the rally — MotoMeet brings the whole motorcycle community into one place."
+          eyebrow="Усе для твого заїзду"
+          title="ОДИН ЗАСТОСУНОК ДЛЯ ВСЬОГО ЗАЇЗДУ"
+          subtitle="Від першого маркера на карті до останньої милі ралі — MotoMeet збирає всю мотоспільноту в одному місці."
         />
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f, i) => (
@@ -225,37 +230,37 @@ function Features() {
 const SHOWCASE = [
   {
     id: 'events',
-    eyebrow: 'Rallies & events',
+    eyebrow: 'Ралі та події',
     eyebrowColor: '#3B82F6',
-    title: 'JOIN RALLIES WORTH THE RIDE',
-    desc: "From weekend track days to multi-day mountain rallies — see the route, the crew and the vibe before you commit. RSVP in one tap and you're in.",
-    bullets: ['Full route, schedule and meeting point', "See who's going and who's hosting", 'Add to calendar and get ride reminders'],
+    title: 'ПРИЄДНУЙСЯ ДО РАЛІ, ВАРТИХ ЗАЇЗДУ',
+    desc: 'Від вихідних на треку до багатоденних гірських ралі — дивись маршрут, команду й атмосферу ще до старту. Приєднуйся в один тап — і ти в грі.',
+    bullets: ['Повний маршрут, розклад і точка збору', 'Бачиш, хто їде та хто організовує', 'Додай у календар і отримуй нагадування'],
     screen: '/landing/screen-event.png',
     glow: '#3B82F6',
-    chip: { icon: <Flag size={16} className="text-white" />, tint: '#3B82F6', title: '184 going', subtitle: 'Alpine Thunder Rally' },
+    chip: { icon: <Flag size={16} className="text-white" />, tint: '#3B82F6', title: '184 учасники', subtitle: 'Ралі «Альпійський грім»' },
   },
   {
     id: 'profile',
-    eyebrow: 'Your rider profile',
+    eyebrow: 'Твій профіль райдера',
     eyebrowColor: '#8B5CF6',
-    title: 'A PROFILE THAT TELLS YOUR STORY',
-    desc: "Your garage, your miles, your crew. Show off the bikes you ride, the routes you've conquered and the badges you've earned along the way.",
-    bullets: ['Showcase the bikes in your garage', 'Track rides, distance and achievements', 'Build your following and join crews'],
+    title: 'ПРОФІЛЬ, ЩО РОЗПОВІДАЄ ТВОЮ ІСТОРІЮ',
+    desc: 'Твій гараж, твої кілометри, твоя команда. Покажи мотоцикли, на яких катаєш, маршрути, які підкорив, і нагороди, здобуті в дорозі.',
+    bullets: ['Покажи мотоцикли у своєму гаражі', 'Відстежуй заїзди, відстань і досягнення', 'Збирай підписників і вступай у команди'],
     screen: '/landing/screen-profile.png',
     glow: '#8B5CF6',
-    chip: { icon: <Trophy size={16} className="text-white" />, tint: '#F59E0B', title: 'Alps Master', subtitle: 'Achievement unlocked' },
+    chip: { icon: <Trophy size={16} className="text-white" />, tint: '#F59E0B', title: 'Підкорювач Альп', subtitle: 'Досягнення відкрито' },
     reverse: true,
   },
   {
     id: 'clubs',
-    eyebrow: 'Clubs & community',
+    eyebrow: 'Клуби та спільнота',
     eyebrowColor: '#22C55E',
-    title: 'FIND YOUR CREW, BUILD YOUR CLUB',
-    desc: 'Join a motorcycle club or start your own. Post rides, rally your members and keep the conversation going between every ride.',
-    bullets: ['Create or join clubs in seconds', 'Group chats and ride announcements', 'Member roles, events and shared routes'],
+    title: 'ЗНАЙДИ КОМАНДУ, СТВОРИ СВІЙ КЛУБ',
+    desc: 'Вступай до мотоклубу або створи власний. Публікуй заїзди, збирай учасників і підтримуй спілкування між кожним заїздом.',
+    bullets: ['Створюй або вступай у клуби за секунди', 'Групові чати й анонси заїздів', 'Ролі учасників, події та спільні маршрути'],
     screen: '/landing/screen-chat.png',
     glow: '#22C55E',
-    chip: { icon: <MessageCircle size={16} className="text-white" />, tint: '#22C55E', title: '3 new messages', subtitle: 'Munich Riders club' },
+    chip: { icon: <MessageCircle size={16} className="text-white" />, tint: '#22C55E', title: '3 нові повідомлення', subtitle: 'Клуб «Мюнхенські райдери»' },
   },
 ]
 function Showcase() {
@@ -269,7 +274,7 @@ function Showcase() {
       <GlowOrb color="#8B5CF63a" size={620} className="left-[-12%] top-[40%]" speed={0.12} />
       <GlowOrb color="#22C55E2e" size={560} className="left-[60%] top-[72%]" />
       <div className="relative mx-auto max-w-[1240px] px-5 py-20 md:px-12">
-        <SectionHead eyebrow="See it in action" title="BUILT FOR THE WAY YOU RIDE" />
+        <SectionHead eyebrow="Подивись у дії" title="СТВОРЕНО ДЛЯ ТВОГО СТИЛЮ ЇЗДИ" />
         <div className="mt-10 flex flex-col gap-24">
           {SHOWCASE.map((s) => (
             <div
@@ -318,15 +323,15 @@ function Showcase() {
 
 // ---------------------------------------------------------------- How it works
 const STEPS = [
-  { n: '01', color: '#8B5CF6', icon: Download, title: 'Download & sign up', desc: 'Grab MotoMeet free on iOS or Android and build your rider profile in under a minute.' },
-  { n: '02', color: '#3B82F6', icon: Map, title: 'Open the live map', desc: "See riders, clubs and events around you in real time. Filter by exactly what you're looking for." },
-  { n: '03', color: '#22C55E', icon: Bike, title: 'Ride together', desc: 'RSVP to rallies, message your crew and hit the open road. Never ride alone again.' },
+  { n: '01', color: '#8B5CF6', icon: Download, title: 'Завантаж і зареєструйся', desc: 'Встанови MotoMeet безкоштовно на iOS чи Android і створи профіль райдера менш ніж за хвилину.' },
+  { n: '02', color: '#3B82F6', icon: Map, title: 'Відкрий живу карту', desc: 'Бачиш райдерів, клуби та події навколо в реальному часі. Фільтруй саме те, що шукаєш.' },
+  { n: '03', color: '#22C55E', icon: Bike, title: 'Катайте разом', desc: 'Приєднуйся до ралі, пиши команді та вирушай у дорогу. Більше ніколи не катай наодинці.' },
 ]
 function HowItWorks() {
   return (
     <section id="routes" className="bg-[#0B1220]">
       <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-12">
-        <SectionHead eyebrow="Get riding in minutes" title="THREE STEPS TO YOUR NEXT RIDE" />
+        <SectionHead eyebrow="Почни кататися за хвилини" title="ТРИ КРОКИ ДО НАСТУПНОГО ЗАЇЗДУ" />
         <div className="relative mt-14 grid gap-5 md:grid-cols-3">
           <div className="pointer-events-none absolute left-[16%] right-[16%] top-[72px] hidden h-px bg-gradient-to-r from-[#8B5CF600] via-primary/50 to-[#22C55E00] md:block" />
           {STEPS.map((s, i) => (
@@ -354,15 +359,15 @@ function HowItWorks() {
 
 // ---------------------------------------------------------------- Testimonials
 const TESTIMONIALS = [
-  { quote: "I found a whole crew within a week of installing MotoMeet. We've done four mountain trips together since.", name: 'Marcus Reier', role: 'Ducati Monster · Munich', avatar: `${IMG}/generated-1782059125075.png`, ring: '#8B5CF6' },
-  { quote: "The live map is addictive. I can see who's out riding and just roll up to a meet. Total game changer.", name: 'Lena Vogt', role: 'Street Triple · Berlin', avatar: `${IMG}/generated-1782059149683.png`, ring: '#3B82F6' },
-  { quote: "Organising our club's rallies used to be chaos. Now everyone RSVPs and gets the route in one tap.", name: 'Iron Wolves MC', role: 'Club admin · Alps', avatar: `${IMG}/generated-1782059160111.png`, ring: '#22C55E' },
+  { quote: 'Я знайшов цілу команду за тиждень після встановлення MotoMeet. Відтоді ми разом зробили чотири гірські поїздки.', name: 'Маркус Раєр', role: 'Ducati Monster · Мюнхен', avatar: `${IMG}/generated-1782059125075.png`, ring: '#8B5CF6' },
+  { quote: 'Жива карта затягує. Бачу, хто зараз у дорозі, і просто під’їжджаю на зустріч. Повністю змінює гру.', name: 'Лена Фогт', role: 'Street Triple · Берлін', avatar: `${IMG}/generated-1782059149683.png`, ring: '#3B82F6' },
+  { quote: 'Організовувати ралі клубу було хаосом. Тепер усі підтверджують участь і отримують маршрут в один тап.', name: 'Залізні Вовки MC', role: 'Адмін клубу · Альпи', avatar: `${IMG}/generated-1782059160111.png`, ring: '#22C55E' },
 ]
 function Testimonials() {
   return (
     <section id="clubs" className="bg-bg">
       <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-12">
-        <SectionHead eyebrow="Loved by riders" title="RIDERS ARE TALKING" />
+        <SectionHead eyebrow="Обожнюють райдери" title="РАЙДЕРИ ГОВОРЯТЬ" />
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {TESTIMONIALS.map((tt, i) => (
             <Reveal key={tt.name} delay={((i % 3) + 1) as 1 | 2 | 3}>
@@ -392,23 +397,23 @@ function FinalCta() {
       <div className="pointer-events-none absolute -top-32 left-1/2 h-[700px] w-[900px] -translate-x-1/2" style={{ background: 'radial-gradient(ellipse at top, #FFFFFF24, transparent 60%)' }} />
       <div className="relative mx-auto flex max-w-[1240px] flex-col items-center px-5 py-28 text-center md:px-12">
         <Reveal>
-          <p className="text-[13px] font-bold uppercase tracking-[0.22em] text-white/70">Free to download</p>
+          <p className="text-[13px] font-bold uppercase tracking-[0.22em] text-white/70">Завантаження безкоштовне</p>
         </Reveal>
         <Reveal delay={1}>
           <h2 className="mt-4 font-display text-[clamp(40px,7vw,62px)] leading-[1.02] tracking-tight text-white">
-            YOUR NEXT RIDE STARTS HERE
+            ТВІЙ НАСТУПНИЙ ЗАЇЗД ПОЧИНАЄТЬСЯ ТУТ
           </h2>
         </Reveal>
         <Reveal delay={2}>
           <p className="mt-5 max-w-xl text-[19px] leading-relaxed text-white/90">
-            Join 50,000+ riders already on the map. Download MotoMeet, find your crew and make every ride a meetup.
+            Приєднуйся до 50 000+ райдерів, які вже на карті. Завантаж MotoMeet, знайди свою команду й перетвори кожен заїзд на зустріч.
           </p>
         </Reveal>
         <Reveal delay={3}>
           <StoreButtons className="mt-9 justify-center" />
         </Reveal>
         <Reveal delay={4}>
-          <p className="mt-6 text-sm font-medium text-white/85">★★★★★ 4.9 on the App Store · Free · No ads, ever</p>
+          <p className="mt-6 text-sm font-medium text-white/85">★★★★★ 4.9 в App Store · Безкоштовно · Без реклами, назавжди</p>
         </Reveal>
       </div>
     </section>
@@ -417,9 +422,9 @@ function FinalCta() {
 
 // ---------------------------------------------------------------- Footer
 const FOOT = {
-  Product: ['Live map', 'Events & rallies', 'Clubs & crews', 'Route planner', 'Pricing'],
-  Community: ['For riders', 'For clubs', 'Ride safety', 'Rider stories'],
-  Company: ['About us', 'Careers', 'Press kit', 'Contact'],
+  Продукт: ['Жива карта', 'Події та ралі', 'Клуби та команди', 'Планувальник маршрутів', 'Ціни'],
+  Спільнота: ['Для райдерів', 'Для клубів', 'Безпека в дорозі', 'Історії райдерів'],
+  Компанія: ['Про нас', 'Кар’єра', 'Прес-кіт', 'Контакти'],
 }
 function Footer() {
   return (
@@ -432,7 +437,7 @@ function Footer() {
               <span className="font-display text-[23px] tracking-wide text-white">MOTOMEET</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-text-secondary">
-              The live map for the global motorcycle community. Find riders, join rallies, never ride alone.
+              Жива карта для світової мотоспільноти. Знаходь райдерів, приєднуйся до ралі, ніколи не катай наодинці.
             </p>
             <div className="mt-5 flex gap-2.5">
               {[Instagram, Youtube, Twitter, Music2].map((Icon, i) => (
@@ -461,9 +466,9 @@ function Footer() {
         </div>
         <div className="my-10 h-px bg-border" />
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-[13px] text-text-muted">© 2026 MotoMeet. Made by riders, for riders.</p>
+          <p className="text-[13px] text-text-muted">© 2026 MotoMeet. Зроблено райдерами для райдерів.</p>
           <div className="flex gap-7">
-            {['Privacy', 'Terms', 'Cookies'].map((l) => (
+            {['Приватність', 'Умови', 'Cookies'].map((l) => (
               <a key={l} href="#top" className="text-[13px] text-text-muted transition-colors hover:text-text">
                 {l}
               </a>

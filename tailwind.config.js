@@ -29,7 +29,8 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Anton', 'Inter', 'sans-serif'],
+        // Oswald carries full Cyrillic, keeping the bold-condensed look for UA copy.
+        display: ['Oswald', 'Inter', 'sans-serif'],
       },
       borderRadius: {
         sm: '10px',
