@@ -11,3 +11,4 @@ dev-dist
 
 .env
 .env*.local
+.vercel

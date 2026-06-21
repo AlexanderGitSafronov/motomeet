@@ -4,7 +4,7 @@
  */
 import { readFileSync } from 'node:fs'
 import { neon } from '@neondatabase/serverless'
-import bcrypt from 'bcryptjs'
+import { hashPassword } from '../api/_lib/auth'
 import {
   currentUser,
   riders,
@@ -127,7 +127,7 @@ async function run() {
     );
   `)
 
-  const hash = await bcrypt.hash(DEFAULT_PASSWORD, 10)
+  const hash = await hashPassword(DEFAULT_PASSWORD)
 
   console.log('Seeding users…')
   const allUsers = [ME, ...riders]

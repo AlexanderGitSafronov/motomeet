@@ -83,6 +83,12 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },
+  // Local dev proxies /api to the deployed Vercel API (Neon-backed).
+  server: {
+    proxy: {
+      '/api': { target: 'https://motomeet-xi.vercel.app', changeOrigin: true, secure: true },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
